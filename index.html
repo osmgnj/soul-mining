@@ -1,352 +1,9 @@
-<!DOCTYPE html>
-<html lang="ja" class="h-full">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>映画私感アーカイブ</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        serif: ['"Noto Serif JP"', 'serif'],
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                    },
-                    colors: {
-                        cinema: {
-                            950: '#07080a',
-                            900: '#0d0e12',
-                            800: '#161923',
-                            700: '#222735',
-                            glow: '#d4af37', // Gold for highlights
-                            accent: '#e25c5c' // Muted red
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', '"Noto Serif JP"', sans-serif;
-            background-color: #07080a;
-            color: #cbd5e1;
-            -webkit-text-size-adjust: 100%;
-        }
-        /* Mobile friendly typography */
-        .prose-custom p {
-            margin-top: 1.25em;
-            margin-bottom: 1.25em;
-            line-height: 1.9;
-            color: #cbd5e1;
-            font-family: "Noto Serif JP", serif;
-            font-size: 0.98rem;
-        }
-        .prose-custom h1 {
-            font-family: "Noto Serif JP", serif;
-            font-weight: 900;
-            color: #ffffff;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            padding-bottom: 0.5rem;
-            font-size: 1.5rem;
-            margin-top: 2em;
-        }
-        .prose-custom h2 {
-            font-family: "Noto Serif JP", serif;
-            font-weight: 700;
-            color: #d4af37;
-            margin-top: 2.2em;
-            margin-bottom: 0.8em;
-            padding-left: 0.75rem;
-            border-left: 3px solid #d4af37;
-            font-size: 1.25rem;
-            line-height: 1.4;
-        }
-        .prose-custom h3 {
-            font-family: "Noto Serif JP", serif;
-            font-weight: 700;
-            color: #ffffff;
-            margin-top: 1.8em;
-            margin-bottom: 0.6em;
-            font-size: 1.1rem;
-        }
-        .prose-custom blockquote {
-            border-left: 4px solid #e25c5c;
-            padding-left: 1.25rem;
-            background-color: rgba(226, 92, 92, 0.05);
-            margin: 1.5rem 0;
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-            font-family: "Noto Serif JP", serif;
-        }
-        .prose-custom blockquote p {
-            color: #f1f5f9 !important;
-            font-size: 0.95rem;
-        }
-        .prose-custom ul {
-            margin: 1rem 0;
-            padding-left: 0;
-        }
-        .prose-custom li {
-            position: relative;
-            padding-left: 1.5rem;
-            margin-bottom: 0.6rem;
-            line-height: 1.7;
-            font-size: 0.95rem;
-        }
-        .prose-custom li::before {
-            content: "■";
-            position: absolute;
-            left: 0;
-            color: #d4af37;
-            font-size: 0.75rem;
-            top: 0.2rem;
-        }
-        .mobile-tab-btn {
-            -webkit-tap-highlight-color: transparent;
-        }
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
-</head>
-<body class="h-full flex flex-col overflow-hidden">
-
-    <!-- Ultra Slim Header -->
-    <header class="bg-cinema-900 border-b border-cinema-800 px-4 py-2 flex items-center justify-between shrink-0 z-20">
-        <div class="flex items-center space-x-2">
-            <span class="text-[9px] font-bold tracking-widest text-cinema-glow font-sans">ARCHIVE</span>
-            <span class="text-xs text-slate-700">|</span>
-            <span class="text-xs font-bold text-slate-200 font-sans">映画私感ポータル</span>
-        </div>
-        <div class="text-[9px] text-slate-600 font-mono">v2.7 (Philosophy Edition)</div>
-    </header>
-
-    <!-- Mobile Navigation Tab Bar -->
-    <nav class="md:hidden flex overflow-x-auto bg-cinema-950 border-b border-cinema-800 px-2 py-1.5 space-x-1.5 shrink-0 no-scrollbar z-10">
-        <button onclick="switchTab('dashboard')" id="m-btn-dashboard" class="mobile-tab-btn shrink-0 text-xs px-3 py-1.5 rounded-md font-sans font-bold bg-cinema-800 text-white border border-cinema-glow/30">
-            採点システム
-        </button>
-        <button onclick="switchTab('manual')" id="m-btn-manual" class="mobile-tab-btn shrink-0 text-xs px-3 py-1.5 rounded-md font-sans font-medium text-slate-400 bg-cinema-900">
-            映画観（必読）
-        </button>
-        <button onclick="switchTab('part1')" id="m-btn-part1" class="mobile-tab-btn shrink-0 text-xs px-3 py-1.5 rounded-md font-sans font-medium text-slate-400 bg-cinema-900">
-            01: 嘘への嗅覚
-        </button>
-        <button onclick="switchTab('part2')" id="m-btn-part2" class="mobile-tab-btn shrink-0 text-xs px-3 py-1.5 rounded-md font-sans font-medium text-slate-400 bg-cinema-900">
-            02: 凡庸と野生
-        </button>
-        <button onclick="switchTab('part3')" id="m-btn-part3" class="mobile-tab-btn shrink-0 text-xs px-3 py-1.5 rounded-md font-sans font-medium text-slate-400 bg-cinema-900">
-            03: 表現の罪
-        </button>
-        <button onclick="switchTab('part4')" id="m-btn-part4" class="mobile-tab-btn shrink-0 text-xs px-3 py-1.5 rounded-md font-sans font-medium text-slate-400 bg-cinema-900">
-            04: カタルシス
-        </button>
-        <button onclick="switchTab('part5')" id="m-btn-part5" class="mobile-tab-btn shrink-0 text-xs px-3 py-1.5 rounded-md font-sans font-medium text-slate-400 bg-cinema-900">
-            05: 未来の航海
-        </button>
-        <button onclick="switchTab('db')" id="m-btn-db" class="mobile-tab-btn shrink-0 text-xs px-3 py-1.5 rounded-md font-sans font-medium text-slate-400 bg-cinema-900">
-            出典: スプシ
-        </button>
-    </nav>
-
-    <!-- Main Workspace -->
-    <div class="flex flex-1 overflow-hidden h-full flex-row">
-        
-        <!-- Sidebar Navigation (PC Only) -->
-        <aside class="w-64 bg-cinema-950 border-r border-cinema-800 flex flex-col justify-between shrink-0 hidden md:flex">
-            <div class="overflow-y-auto py-4 px-3 space-y-4 flex-1">
-                <div>
-                    <h3 class="text-[9px] font-bold text-slate-500 uppercase tracking-wider px-2 mb-2 font-sans">ダッシュボード</h3>
-                    <nav class="space-y-0.5">
-                        <button onclick="switchTab('dashboard')" id="btn-dashboard" class="tab-btn w-full text-left px-3 py-2 rounded-md text-xs font-sans flex items-center space-x-2 transition-all duration-150 bg-cinema-800/50 text-white border-l-2 border-cinema-glow">
-                            <i class="fa-solid fa-chart-line text-cinema-glow"></i>
-                            <span class="font-semibold">00：採点システム</span>
-                        </button>
-                    </nav>
-                </div>
-
-                <div>
-                    <h3 class="text-[9px] font-bold text-slate-500 uppercase tracking-wider px-2 mb-2 font-sans">自己紹介・マニフェスト</h3>
-                    <nav class="space-y-0.5">
-                        <button onclick="switchTab('manual')" id="btn-manual" class="tab-btn w-full text-left px-3 py-2 rounded-md text-xs font-sans flex items-center space-x-2 transition-all duration-150 text-slate-400 hover:bg-cinema-900 hover:text-slate-200 border-l-2 border-transparent">
-                            <i class="fa-solid fa-fire text-cinema-accent"></i>
-                            <span class="font-semibold text-cinema-accent">映画観（取扱説明書）</span>
-                        </button>
-                    </nav>
-                </div>
-
-                <div>
-                    <h3 class="text-[9px] font-bold text-slate-500 uppercase tracking-wider px-2 mb-2 font-sans">映画私感分析</h3>
-                    <nav class="space-y-0.5">
-                        <button onclick="switchTab('part1')" id="btn-part1" class="tab-btn w-full text-left px-3 py-2 rounded-md text-xs font-sans flex items-center space-x-2 transition-all duration-150 text-slate-400 hover:bg-cinema-900 hover:text-slate-200 border-l-2 border-transparent">
-                            <span class="text-slate-500 font-bold">01</span>
-                            <span class="font-semibold">第1回：嘘への異常な嗅覚</span>
-                        </button>
-                        <button onclick="switchTab('part2')" id="btn-part2" class="tab-btn w-full text-left px-3 py-2 rounded-md text-xs font-sans flex items-center space-x-2 transition-all duration-150 text-slate-400 hover:bg-cinema-900 hover:text-slate-200 border-l-2 border-transparent">
-                            <span class="text-slate-500 font-bold">02</span>
-                            <span class="font-semibold">第2回：及第の凡庸と野生</span>
-                        </button>
-                        <button onclick="switchTab('part3')" id="btn-part3" class="tab-btn w-full text-left px-3 py-2 rounded-md text-xs font-sans flex items-center space-x-2 transition-all duration-150 text-slate-400 hover:bg-cinema-900 hover:text-slate-200 border-l-2 border-transparent">
-                            <span class="text-slate-500 font-bold">03</span>
-                            <span class="font-semibold">第3回：表現の罪と綺麗事</span>
-                        </button>
-                        <button onclick="switchTab('part4')" id="btn-part4" class="tab-btn w-full text-left px-3 py-2 rounded-md text-xs font-sans flex items-center space-x-2 transition-all duration-150 text-slate-400 hover:bg-cinema-900 hover:text-slate-200 border-l-2 border-transparent">
-                            <span class="text-slate-500 font-bold">04</span>
-                            <span class="font-semibold">第4回：カタルシスの構造</span>
-                        </button>
-                        <button onclick="switchTab('part5')" id="btn-part5" class="tab-btn w-full text-left px-3 py-2 rounded-md text-xs font-sans flex items-center space-x-2 transition-all duration-150 text-slate-400 hover:bg-cinema-900 hover:text-slate-200 border-l-2 border-transparent">
-                            <span class="text-slate-500 font-bold">05</span>
-                            <span class="font-semibold">最終回：未来の航海図</span>
-                        </button>
-                    </nav>
-                </div>
-
-                <div>
-                    <h3 class="text-[9px] font-bold text-slate-500 uppercase tracking-wider px-2 mb-2 font-sans">データソース</h3>
-                    <nav class="space-y-0.5">
-                        <button onclick="switchTab('db')" id="btn-db" class="tab-btn w-full text-left px-3 py-2 rounded-md text-xs font-sans flex items-center space-x-2 transition-all duration-150 text-slate-400 hover:bg-cinema-900 hover:text-slate-200 border-l-2 border-transparent">
-                            <i class="fa-solid fa-database text-slate-500"></i>
-                            <span class="font-semibold">出典：スプシ原本データ</span>
-                        </button>
-                    </nav>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Dynamic Content Space -->
-        <main class="flex-1 bg-cinema-900 overflow-y-auto px-4 py-4 md:px-10 md:py-8 flex flex-col h-full">
-            <div class="max-w-3xl mx-auto w-full flex-1 pb-16">
-
+<!-- ... existing code ... -->
                 <!-- ==================== TAB 00: DASHBOARD ==================== -->
                 <article id="content-dashboard" class="tab-content">
                     <div class="mb-5 font-sans border-b border-cinema-800 pb-3">
                         <span class="text-[9px] font-bold text-cinema-glow tracking-widest uppercase block">EVALUATION SYSTEM</span>
-                        <h2 class="text-xl font-serif text-white font-bold mt-0.5 leading-tight">私の映画評価アルゴリズム</h2>
-                    </div>
-
-                    <!-- Algorithm Cards -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
-                        <div class="bg-cinema-950 border border-cinema-800 p-3 rounded-lg">
-                            <h3 class="text-cinema-glow font-bold text-xs uppercase tracking-wider mb-2 font-sans flex items-center">
-                                <i class="fa-solid fa-arrow-down-wide-narrow mr-1.5"></i> 7つの評価基準（重要度順）
-                            </h3>
-                            <ol class="space-y-1 text-xs font-sans text-slate-300">
-                                <li class="flex items-center justify-between text-white font-semibold border-b border-cinema-900 pb-0.5">
-                                    <span>1. カタルシス・余韻 <span class="text-[9px] text-cinema-glow ml-1 font-mono">[最重要]</span></span>
-                                    <span class="text-[10px] text-slate-400">魂の浄化・震え</span>
-                                </li>
-                                <li class="flex items-center justify-between text-slate-200 border-b border-cinema-900 pb-0.5">
-                                    <span>2. 価値転倒</span>
-                                    <span class="text-[10px] text-slate-500">パラダイム破壊・覚醒</span>
-                                </li>
-                                <li class="flex items-center justify-between text-slate-300 border-b border-cinema-900 pb-0.5">
-                                    <span>3. 知識・機知</span>
-                                    <span class="text-[10px] text-slate-500">粋・知的な駆け引き</span>
-                                </li>
-                                <li class="flex items-center justify-between text-slate-400 border-b border-cinema-900 pb-0.5">
-                                    <span>4. 再見欲</span>
-                                    <span class="text-[10px] text-slate-500">反復への耐性</span>
-                                </li>
-                                <li class="flex items-center justify-between text-slate-400 border-b border-cinema-900 pb-0.5">
-                                    <span>5. サウンド</span>
-                                    <span class="text-[10px] text-slate-500">音響・陰陽の補正</span>
-                                </li>
-                                <li class="flex items-center justify-between text-slate-500 border-b border-cinema-900 pb-0.5">
-                                    <span>6. まとまり・構成</span>
-                                    <span class="text-[10px] text-slate-500">美的な完成度</span>
-                                </li>
-                                <li class="flex items-center justify-between text-slate-500">
-                                    <span>7. 爽快感・映像美</span>
-                                    <span class="text-[10px] text-slate-500">外的なパッケージ</span>
-                                </li>
-                            </ol>
-                        </div>
-
-                        <div class="bg-cinema-950 border border-cinema-800 p-3 rounded-lg flex flex-col justify-between">
-                            <div>
-                                <h3 class="text-cinema-accent font-bold text-xs uppercase tracking-wider mb-1.5 font-sans flex items-center">
-                                    <i class="fa-solid fa-gears mr-1.5"></i> スコアの算出ルール
-                                </h3>
-                                <p class="text-[11px] text-slate-300 leading-relaxed font-sans mb-2">
-                                    <strong>「カタルシス」の値が、スコアの大枠（ベーススコア）を決定づけます。</strong>
-                                </p>
-                                <div class="bg-cinema-900 border border-cinema-800 p-2 rounded space-y-0.5 font-mono text-[10px] text-slate-300">
-                                    <div class="flex justify-between"><span class="text-cinema-glow">カタルシス「10」</span> <span>➡ 100点（満点）</span></div>
-                                    <div class="flex justify-between"><span class="text-white">カタルシス「9」</span> <span>➡ 90点台（傑作）</span></div>
-                                    <div class="flex justify-between"><span class="text-cinema-accent">「9か迷う」</span> <span>➡ 89点（極限の壁）</span></div>
-                                    <div class="flex justify-between"><span class="text-slate-400">カタルシス「8」</span> <span>➡ 80点台</span></div>
-                                    <div class="flex justify-between"><span class="text-slate-500">カタルシス「6〜7」</span> <span>➡ 60〜70点台（及第）</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Interactive Rating Calculator -->
-                    <div class="bg-gradient-to-r from-cinema-950 to-cinema-900 border border-cinema-glow/20 p-3.5 rounded-lg">
-                        <h3 class="text-white font-bold text-xs mb-1 font-sans flex items-center">
-                            <i class="fa-solid fa-calculator text-cinema-glow mr-1.5"></i> 採点脳シミュレーター
-                        </h3>
-                        <p class="text-[10px] text-slate-400 mb-3 font-sans">手動で各指標を動かすことで、私の評価アルゴリズムに基づいた総合得点と総評を算出します。</p>
-
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <!-- Left: Inputs -->
-                            <div class="md:col-span-2 space-y-2.5">
-                                <div>
-                                    <label class="block text-[9px] font-bold uppercase text-cinema-glow mb-0.5 font-sans">カタルシス（最優先）</label>
-                                    <select id="calc-catharsis" onchange="runCalculator()" class="w-full bg-cinema-800 border border-cinema-700 rounded p-1 text-xs text-white focus:outline-none focus:border-cinema-glow font-sans">
-                                        <option value="10">10 (満点・超越の体験)</option>
-                                        <option value="9">9 (90点台・深い余韻)</option>
-                                        <option value="8.9" selected>9か迷う (89点・せめぎ合いの極限)</option>
-                                        <option value="8">8 (80点台・優れた感情の揺さぶり)</option>
-                                        <option value="7">7 (70点台・まずまずの余韻)</option>
-                                        <option value="6">6 (60点台・一応の及第)</option>
-                                        <option value="5">5 (意味不明、または独りよがりな狂気)</option>
-                                        <option value="2">2 (子どもだまし・13分で挫折)</option>
-                                    </select>
-                                </div>
-
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div>
-                                        <label class="block text-[9px] font-bold text-slate-400 uppercase mb-0.5 font-sans">価値転倒 (重み: 高)</label>
-                                        <input type="range" id="calc-subversion" min="1" max="10" value="8" oninput="runCalculator()" class="w-full accent-cinema-glow">
-                                    </div>
-                                    <div>
-                                        <label class="block text-[9px] font-bold text-slate-400 uppercase mb-0.5 font-sans">知識・機知 (重み: 中)</label>
-                                        <input type="range" id="calc-wit" min="1" max="10" value="7" oninput="runCalculator()" class="w-full accent-cinema-glow">
-                                    </div>
-                                    <div>
-                                        <label class="block text-[9px] font-bold text-slate-400 uppercase mb-0.5 font-sans">再見欲 (重み: 中)</label>
-                                        <input type="range" id="calc-rewatch" min="1" max="10" value="8" oninput="runCalculator()" class="w-full accent-cinema-glow">
-                                    </div>
-                                    <div>
-                                        <label class="block text-[9px] font-bold text-slate-400 uppercase mb-0.5 font-sans">サウンド (重み: 低)</label>
-                                        <input type="range" id="calc-sound" min="1" max="10" value="8" oninput="runCalculator()" class="w-full accent-cinema-glow">
-                                    </div>
-                                    <div>
-                                        <label class="block text-[9px] font-bold text-slate-400 uppercase mb-0.5 font-sans">構成・まとまり (重み: 低)</label>
-                                        <input type="range" id="calc-cohesion" min="1" max="10" value="9" oninput="runCalculator()" class="w-full accent-cinema-glow">
-                                    </div>
-                                    <div>
-                                        <label class="block text-[9px] font-bold text-slate-400 uppercase mb-0.5 font-sans">爽快感・映像美 (重み: 低)</label>
-                                        <input type="range" id="calc-beauty" min="1" max="10" value="8" oninput="runCalculator()" class="w-full accent-cinema-glow">
-                                    </div>
-                                </div>
-                            </div>
-
+<!-- ... existing code ... -->
                             <!-- Right: Result -->
                             <div class="bg-cinema-950 border border-cinema-800 rounded-lg p-3 flex flex-col justify-center items-center text-center">
                                 <span class="text-[9px] text-slate-400 uppercase tracking-widest font-sans">SOUL SCORE</span>
@@ -366,25 +23,7 @@
                         <span class="text-xs font-bold text-cinema-accent tracking-widest uppercase block">CORE PHILOSOPHY & MANIFESTO</span>
                         <h2 class="text-xl font-serif text-white font-bold mt-0.5 leading-tight">私の映画観と取扱説明書（マニフェスト）</h2>
                     </div>
-
-                    <p>私がなぜ映画を見るのか。なぜ、これほどまでに執拗に評価し、容赦なく切り捨てるのか。<br>それは、頭を空っぽにして時間を潰すための「現実逃避」ではない。この理不尽で過酷な現実（コート）で血を流しながら戦い続けるための、**「実弾（生きるための武器）」の調達**である。</p>
-                    
-                    <p>私の生き方の基本OSは、「残酷な現実への冷徹な視座」と、「それでも昨日より良き人間であろうとするロマンティシズム」によって駆動している。映画批評家の町山智浩氏が語ったように、架空のスーパーヒーローが架空の悪党を倒すような「ジェットコースター的快楽（中枢神経への電気信号）」には1ミリの価値も見出さない。そんなものを見終わったところで、私の中のリアルな苦しみやフラストレーションの総量は一切減らないからだ。</p>
-
-                    <h2>1. 「見る前と見た後で、違う人間になること」</h2>
-                    <p>私が映画に求める至高の条件（カタルシス）とは、単なる「面白さ」ではない。映画館を出た後に、「俺は昨日までの俺とは違う」「今日から生き方を変えよう」と本気で思えるかどうかだ。<br>
-                    『ロッキー』の主人公が、才能もなく、勝つことが不可能な状況下で、それでも「15ラウンド終了のゴングが鳴るまで、ノックアウトされずに立っていること」だけを目標にボロボロになって戦い抜く姿。あるいは『シティ・オブ・ゴッド』の主人公が、周囲が殺しやドラッグで死んでいく地獄のスラムで、ただカメラだけを握りしめて生き抜く姿。<br>
-                    才能がなくても、環境が最悪でも、ギブアップせずに好きなことを貫けば、現実の不条理と戦える。その**「戦うための技（武器）」**を教えてくれる作品こそが、私の魂を浄化させる（カタルシス）。</p>
-
-                    <h2>2. 現実の残酷さと「運転者」としての圧倒的覚悟</h2>
-                    <p>世界観の根底には、「この世界は本質的に理不尽であり、救いなどない」という絶対的なリアリズムが横たわっている。</p>
-                    <p><strong>「俺でもそうする。辛い世界を楽しく適度に責任感持って生きるしかない。」</strong>（ミリオンダラー・ベイビーより）</p>
-                    <p>これは、他者の人生を背負い、指導し、導く立場にある者としての、血を吐くような覚悟の宣言である。世界が辛く、時に最悪の選択を迫られる場所であったとしても、私はその当事者としての責任から絶対に逃げない。</p>
-
-                    <h2>3. より良き人間（ベターマン）への希求</h2>
-                    <p><strong>「美と醜 リアルと欲望 総じて美 感情描写すごい。大人の葛藤、恋愛。グッドマンになりたくなる。ベターマンに。」</strong>（恋愛小説家より）</p>
-                    <p>人間は醜く、不器用で、欲望にまみれている。しかし、互いの醜さをぶつけ合いながらも、逃げずに対話し、共に「昨日より少しでも良い人間（A Better Man）」を目指してもがく関係性。これこそが私の愛する泥臭いロマンティシズムである。</p>
-
+<!-- ... existing code ... -->
                     <h2>4. 「日常」の反復美学と、静かななる尊厳</h2>
                     <p><strong>「毎日をただ整えて過ごす。反復の美学。素晴らしいメッセージ。もっかい見る。9かも。役所広司の満足感溢れる表情が忘れられない。」</strong>（PERFECT DAYSより）</p>
                     <p>毎朝目を覚まし、体を鍛え、仕事に向かう。そのルーティンの反復の中に宿る静寂と尊厳を愛している。その反復こそが、残酷な世界でタフに戦い続けるための唯一の「型」なのだ。</p>
@@ -393,533 +32,112 @@
                 <!-- ==================== TAB 01: PART 1 ==================== -->
                 <article id="content-part1" class="tab-content prose-custom hidden">
                     <div class="mb-5 font-sans border-b border-cinema-800 pb-3">
-                        <span class="text-xs font-bold text-cinema-glow tracking-widest uppercase block">DEEP ANALYSIS - PART 1</span>
+                        <span class="text-xs font-bold text-cinema-glow tracking-widest uppercase block">DEEP ANALYSIS - PART 1 (EXPANDED EDITION)</span>
                         <h2 class="text-xl font-serif text-white font-bold mt-0.5 leading-tight">世間の「名作」との決定的な乖離が暴く、私の『嘘への異常な嗅覚』</h2>
                     </div>
 
-                    <p>私の映画レビューのログ。そこでまず観測される最大の地殻変動は、**「世間がこぞって絶賛し、アカデミー賞を総なめにしたような作品」に対する、驚くほど低く冷徹なジャッジ**である。</p>
+                    <p>私の映画レビューのログ。そこでまず観測される最大の地殻変動は、**「世間がこぞって絶賛し、アカデミー賞を総なめにしたような作品」や「映画史上の傑作と名高い古典」に対する、驚くほど低く冷徹なジャッジ**である。ここに、私が人生において決して譲れない「絶対的な美意識」が隠されている。</p>
 
                     <p>世間の常識や、評論家のお墨付き（権威）を私は1ミリも信用しない。なぜなら、それらの多くは「現実の生々しい泥臭さや、他者と関係する痛み」を美しく漂白した**『良くできた嘘（パッケージ）』**だからである。私にとって、その漂白された「綺麗事」を嗅ぎ分ける能力は、単なる趣味の偏りではなく、この辛い現実世界を自分の足で生き抜くための、極めて切実な生存戦略（リアルへの感覚）なのだ。</p>
 
-                    <h2>1. 『ショーシャンクの空に』パラドックス：「綺麗すぎる勝利」への静かなる拒絶</h2>
+                    <h2>1. 箱庭の救済と「予定調和」への静かなる拒絶</h2>
+                    
                     <p>映画史において「歴代最高の感動作」「人生で一度は見るべき名作」として不動の1位に君臨し続ける『ショーシャンクの空に』。しかし私のジャッジは、カタルシス「6」、総合「7」という、極めて冷ややかなものである。</p>
+                    
                     <blockquote>
-                        <p><strong>私の本音：</strong>「うーんいい映画。きれいな映画。なんであんま感情が乗れなかったんだろう。もっかい見るか。」</p>
+                        <p><strong>『ショーシャンクの空に』（カタルシス6）：</strong>「うーんいい映画。きれいな映画。なんであんま感情が乗れなかったんだろう。もっかい見るか。」</p>
                     </blockquote>
-                    <p>この「なんで感情が乗れなかったんだろう」という疑問への答えは、私の「映画観（マニフェスト）」に照らし合わせれば一目瞭然である。本作の主人公アンディは完全なる無実であり、彼を虐げる刑務所長や看守は救いようのない「悪」として描かれる。そして最後は、見事な知略によってアンディが悪を出し抜き、スコールの中で両手を広げ、青い海という完璧な自由（ハレ）へと脱出する。<br>
-                    しかし、私は知っている。現実世界における「悪」は、そんなに単純に記号化できるものではない。何十年も穴を掘り続ければいつか脱出できるといった「都合の良い因果応報」は現実にはないのだ。私が求めているのは、こうした「美しすぎる勝利（空っぽな快楽）」ではなく、**『ミリオンダラー・ベイビー（カタルシス8、総合8）』**でえぐり出された「現実の最も残酷な泥沼」であり、その地獄を前にして「俺でもそうする」と当事者として責任を引き受ける人間の凄絶な矜持である。アンディの勝利は、私にとってあまりにもお行儀が良すぎ、見終わった後に「私の生き方を変える（現実と戦う武器になる）」ような熱量を持っていなかったのだ。</p>
+                    
+                    <p>この「きれいな映画」という一見穏やかな言葉の裏には、映画が仕掛けた「安全な予定調和」への深い退屈が潜んでいる。本作の主人公アンディは完全なる無実であり、彼を虐げる刑務所長や看守は救いようのない「悪」として描かれる。そして最後は、見事な知略によってアンディが悪を出し抜き、スコールの中で両手を広げ、青い海という完璧な自由（ハレ）へと脱出する。</p>
+                    
+                    <p>しかし、私は知っている。現実世界における「悪」は、そんなに単純に記号化できるものではないことを。現実の不条理は、何十年も穴を掘り続ければいつか脱出できるといった種類の、因果応報の範囲内には収まらない。私が求めているのは、こうした「美しすぎる勝利」ではなく、泥水の中でそれでも当事者として責任を引き受ける人間の凄絶な矜持である。アンディの勝利は、私にとってあまりにもお行儀が良すぎ、私の実人生のモヤモヤに切り込んでくるような「生々しい体温」を伴わなかったのだ。</p>
 
-                    <h2>2. 『LA LA LAND』アレルギー：「能天気さ」という名の電気的快楽への嫌悪</h2>
-                    <p>世界中でブームを巻き起こした『LA LA LAND』に対し、私は信じがたいレベルの拒絶反応を示している。</p>
-                    <blockquote>
-                        <p><strong>私の本音：</strong>「能天気すぎて13分で心が折れてみるのをやめてしまいました。また能天気なときにチャレンジしたいと思います」</p>
-                    </blockquote>
-                    <p>「13分で心が折れた」という即時のシャットダウン。なぜ私はあのカラフルで軽快なミュージカルの冒頭（大渋滞の高速道路で皆が車から飛び出して歌い踊るシーン）に、これほどの生理的嫌悪を覚えたのか。<br>
-                    それは、あの映像が「視覚や聴覚といった中枢神経に電気的に快楽を送り込むだけの、ジェットコースター的快楽」に過ぎないからである。人間の暗部（シャドウ）や、他者と関わることの本当の苦痛（ケ）を何一つ描かないまま、単に「夢を追う私たちは美しい」という前提だけでステップを踏む姿は、ただの「逃避」だ。私は、まず徹底的な闇を直視すること、すなわち**『JOKER（カタルシス9）』**が暴いた「社会が構造的に無敵の人を作り出すレシピ」や、**『 se7en（カタルシス8）』**の錆びついた暗黒に身を置くことこそが、本当の光を理解するための前提条件であると信じている。その深淵を無視して「能天気な電気信号」を押し売りしてくるテキストに対して、私の知性は1秒たりとも付き合う必要性を認めなかったのである。</p>
+                    <p>同じく「お行儀の良さ」への拒絶は、日本のベストセラー小説の映画化『国宝』に対しても、容赦なく牙を剥く。</p>
 
-                    <h2>3. ヒューマニズムという名のビジネス：『シンドラーのリスト』</h2>
-                    <p>ホロコーストという歴史の悲劇を圧倒的な映像美で描き、世界を泣かせた『シンドラーのリスト』。私は2023年と2026年でそれぞれこの映画に触れ、冷静な視線でその本質をえぐり出している。</p>
                     <blockquote>
-                        <p><strong>私の本音（2026）：</strong>「リアルを描いていた。最後に後悔するところはぐっと来た。バッジだけで2人救えたのに。世渡り、善」<br><strong>私の本音（2023）：</strong>「ビジネスが人を救う一例、淡々と仕事をこなす」</p>
+                        <p><strong>『国宝』（カタルシス8・総合9とするも）：</strong>「とにかく物分かりがよすぎでお利巧、もっともっとできた映画。悪魔との契約やドロドロの描写なさすぎ。きれいすぎるよこんなん。」</p>
                     </blockquote>
-                    <p>ここでも、私の視線は世間の「人道主義の感動巨編」というパッケージを完全に無視している。シンドラーを「無私の聖人」として崇めるのではなく、あくまで彼を「したたかな実業家」として捉え、**「ビジネス（世渡り）が結果的に人を救った一例」**として極めて構造的・即物的に理解しているのだ。最後の有名な「バッジを売っていれば、あと2人救えたのに」と泣くシーンに対しても、感傷に流されるのではなく、「淡々と仕事をこなすこと」と「善の限界（世渡り）」の摩擦として受け止めている。私は、お涙頂戴の歴史物語ではなく、理不尽な世界の中で「具体的にどう立ち回って人を救うか」という、地に足の着いたストリート・スマートな戦術（武器）にこそ、本当の説得力を感じるのである。</p>
 
-                    <h2>4. 純朴という名の超越：『フォレスト・ガンプ』 vs 『アイ・アム・サム』の分水嶺</h2>
-                    <p>同じ「知的障害を抱える主人公の奮闘劇」でありながら、私の評価で天と地ほどの差が開いたのが『フォレスト・ガンプ』と『アイ・アム・サム』である。</p>
-                    <blockquote>
-                        <p><strong>『フォレスト・ガンプ』（カタルシス8）：</strong>「1人語りでここまでよいとは。純朴が世界を貫く。とにかくまっすぐ走る。」<br><strong>『アイ・アム・サム』（カタルシス6）：</strong>「フォレストガンプの二番煎じ」</p>
-                    </blockquote>
-                    <p>この差はどこから生まれるのか。それは**「純朴（野生）」が世界と本当に衝突し、それを貫き通したか**という切実さの有無である。<br>フォレスト・ガンプは、社会の複雑なシステムや悪意を一切理解しないまま、ただ「まっすぐ走る」という野生の初期衝動だけでアメリカの歴史そのものを突き抜けていく。そこには、作為的なお涙頂戴を超えた「超越的な力強さ（現実と戦う意志）」がある。一方の『アイ・アム・サム』は、ビートルズの音楽や親子の絆という、最初から観客を泣かせるために用意された「マーケティング的な泣かせのレシピ」を丁寧になぞっただけの嘘（お行儀の良さ）に過ぎない。</p>
+                    <p>作品としてのまとまりの良さ（総合9）は認めつつも、その本質が「物分かりが良すぎる」ことへの強烈な不満。「きれいすぎる」という言葉は、私にとって最大の侮蔑に近い。人間が芸や美（国宝）を極める過程には、他者を蹴落とし、エゴを剥き出しにし、文字通り「悪魔と契約する」ような血生臭いドロドロとした欲望が必ず存在するはずだ。その「人間の暗部」から目を背け、綺麗なパッケージとして消費できるように漂白されたテキストは、現実世界で戦うための武器（実弾）にはなり得ないのである。</p>
 
-                    <h2>5. 権威の完全なる無効化：『市民ケーン』と『東京物語』</h2>
-                    <p>映画評論家やアカデミズムが「映画史上の最高傑作」と祭り上げるこれら2作に対する私の評価は、以下の通りである。</p>
+                    <h2>2. 「能天気さ」という名の電気的快楽と、感情の搾取</h2>
+                    
+                    <p>私が映画という表現手段において最も強い生理的嫌悪を示すのが、現実の重さを完全に無視した「能天気なハッピー」と、泣かせるためだけに作られた「無垢のマーケティング」である。</p>
+
                     <blockquote>
-                        <p><strong>『市民ケーン』：</strong>「よくわからん。淡々としすぎだし、意図がわかりづらい。」<br><strong>『東京物語』：</strong>「淡々と。なにが名作なのか、まだ理解できない。」</p>
+                        <p><strong>『LA LA LAND』（カタルシス2）：</strong>「能天気すぎて13分で心が折れてみるのをやめてしまいました。また能天気なときにチャレンジしたいと思います」<br>
+                        <strong>『リトル・ショップ・オブ・ホラーズ』（カタルシス6）：</strong>「なんやねん。紙芝居みたいだった。こどもむけ？」</p>
                     </blockquote>
-                    <p>この清々しいまでの「わからない」という言葉。これは無知から来るものではなく、**「私に生きるための武器（技）を授けてくれない教養など、ただの情報のゴミである」**という徹底した実存主義の表れである。映画評論家はカメラワークや文脈でこれらの作品を崇めるが、私にとっては、他者への介入の痛み、あるいは自分の人生をどう運転するかという「今、ここにある切実さ（ケの摩擦）」が描かれていなければ、どれほど映像技術が革新的であっても「退屈な記念碑」に過ぎないのだ。</p>
+
+                    <p>大ヒットミュージカル『LA LA LAND』に対する「13分で心が折れた」という即時のシャットダウン。なぜ私はあのカラフルで軽快なミュージカルの冒頭（大渋滞の高速道路で皆が車から飛び出して歌い踊るシーン）に、これほどの拒絶反応を示したのか。それは、私にとって「能天気さ（無根拠なハッピー）」とは、この残酷な現実を生きる上での**「準備不足」「覚悟の欠如」**を意味するからである。</p>
+                    
+                    <p>高速道路の渋滞とは、現代人のどうしようもないフラストレーション（ケ）の象徴である。そこから突然飛び出して踊り出す行為は、現実からの完全な「逃避」でしかない。私は、まず徹底的な闇を直視することこそが、本当の光を理解するための前提条件であると信じている。その深淵を無視して「能天気」を押し売りしてくるテキスト（あるいは『リトル・ショップ…』のような紙芝居的ファンタジー）に対して、私の知性は1秒たりとも付き合う必要性を認めない。</p>
+
+                    <p>さらにこの「感情の押し売り」への怒りは、日本の感動ポルノやハリウッドのお涙頂戴映画に対して最高潮に達する。</p>
+
+                    <blockquote>
+                        <p><strong>『君の膵臓をたべたい』（カタルシス6）：</strong>「浜辺美波のういういしさが押し売り過ぎてきつい。膵臓を食べたら治るって言説との構成はうまかった」<br>
+                        <strong>『湯を沸かすほどの熱い愛』（カタルシス7）：</strong>「本当の宮沢りえはもっと美しい。消費しちゃダメ。肝っ玉母ちゃんにしすぎ。」<br>
+                        <strong>『アイ・アム・サム』（カタルシス6）：</strong>「フォレストガンプの二番煎じ」</p>
+                    </blockquote>
+
+                    <p>難病のヒロインの死を描いた『君の膵臓をたべたい』。その映画全体の構成力を認めつつも、ヒロインのういういしさを「押し売り」と感じた瞬間、私の心は完全にシャットダウンする。死を前にした人間の弱さや醜さを一切排除し、「男にとって都合の良い無垢な少女のまま死んであげる」という、作り手がマーケティング思考で仕掛けた「おためごかし」を嗅ぎ取っているからである。</p>
+                    
+                    <p>『湯を沸かすほどの熱い愛』に対しても、「宮沢りえを消費しちゃダメ」と警告する。他者のために死ぬまで尽くす「完璧な母親」という都合の良い虚像（肝っ玉母ちゃん）を作り上げ、そこで観客の涙を絞り取る。その感情の榨取に、私の倫理観は真っ向から抗議の声を上げる。そして『アイ・アム・サム』の「純粋な障害者と冷たい社会」という、泣かせるために用意されたあざとい構図は、初期衝動だけで世界を突き抜けた『フォレスト・ガンプ』の「二番煎じの嘘」として一蹴されるのである。無垢や美談という名の「安全な感動」の押し売りは、私にとって人生の時間を無駄にする悪質な詐欺に等しい。</p>
+
+                    <h2>3. 「空中戦」と化す映像美、肉体とコンテクストの不在</h2>
+                    
+                    <p>私が映画に求めるのは、どこまでも「生々しい他者との関係性の摩擦（介入）」である。それゆえ、その前段階の葛藤やプロセスの文脈をすべて無視し、ただ衝撃的な映像や記号だけを唐突に羅列してくる作品を、私は**「空中戦」**と呼び、徹底的に退ける。</p>
+
+                    <blockquote>
+                        <p><strong>『華麗なるギャツビー』（カタルシス5）：</strong>「空中戦をずっとやられてた感じ。共同幻想。」<br>
+                        <strong>『アネット』（カタルシス4）：</strong>「ずっと謎ミュージカル。マリオンコティヤール好きなのに。」<br>
+                        <strong>『攻殻機動隊 GHOST IN THE SHELL』（カタルシス5）：</strong>「商業的に急いで作られた映画。名を借りて。」<br>
+                        <strong>『ゴジラ-1.0』（カタルシス5）：</strong>「こまとまり」</p>
+                    </blockquote>
+
+                    <p>『ギャツビー』の絢爛豪華な映像美や、『アネット』のシュールなミュージカル演出。そこには、人間がなぜそこまで傷つき、なぜその選択に至ったのかという、血の通った理由（ケの蓄積）が存在しない。監督が自分の頭の中だけで描いた美的センス（共同幻想）を、生身の肉体を通さずに直接スクリーンに投影しただけの「空中戦」である。私は大好きなマリオン・コティヤールが出ていようとも、彼女がただの記号として「消費」されていると感じた瞬間、スッと心を閉ざす。</p>
+                    
+                    <p>同様に、大作である『攻殻機動隊』の実写版を「商業的に急いで作られた」と見抜く。作り手自身の「どうしてもこれを伝えたい」という切実なフラストレーション（町山氏が語る映画の原動力）が欠如し、単に名前を借りただけのパッケージビジネスだからである。また、世界的に評価された『ゴジラ-1.0』に対しても「こまとまり（小綺麗にまとまっている）」とだけ記し、5点という低いカタルシスを与えている。表面的なVFXや脚本の整合性がいかに取れていようと、そこに「現実の不条理を食い破る、人間の剥き出しの野生」が宿っていなければ、それはただの綺麗なショーケースに過ぎないのだ。</p>
+
+                    <p>さらにこの「文脈なき記号の羅列」への嫌悪は、恋愛や性描写にも厳密に適用される。</p>
+
+                    <blockquote>
+                        <p><strong>『エターナル・サンシャイン』（カタルシス6）：</strong>「きれいごとじゃないところはよかったけど、何も感情移入はできなかった。僕に激情な恋愛経験が無いのかな。感情的に人を傷つけてしまった後悔を持っている人へ」<br>
+                        <strong>『スプリング・フィーバー』（カタルシス5）：</strong>「BLが生々しすぎて見れず。」<br>
+                        <strong>『アイズ ワイド シャット』（カタルシス6）：</strong>「意味が分からんかった気がする。人間の本質は性」</p>
+                    </blockquote>
+
+                    <p>『エターナル・サンシャイン』のトリッキーな恋愛描写に感情移入できなかったのは、それがギミック（記憶を消す）に頼った空中戦であり、私が『恋愛小説家』や『マディソン郡の橋』で評価する「不器用な大人の本音の対話」や「抗えない野生のうねり」といった泥臭い実存が希薄だからである。<br>また『スプリング・フィーバー』に対して「生々しすぎて見れず」と距離を置いたのは、そこに至るまでの「精神的な駆け引き（知・機）」や「他者との致命的な介入」という人間的葛藤の文脈がないまま、ただ生肉のような肉体（記号）だけが提示されていると感じたからである。知的なコンテクストを伴わない性描写（アイズ ワイド シャット含む）は、私にとってやはり退屈な記号の連続に過ぎない。</p>
+
+                    <h2>4. 「歴史的権威」の完全なる無効化：博物館の展示品への冷笑</h2>
+                    
+                    <p>最後に、映画評論家やアカデミズムが「映画史上の最高傑作」と祭り上げる古典的作品に対する、私の清々しいまでの冷笑（シャットダウン）を見てみよう。</p>
+
+                    <blockquote>
+                        <p><strong>『市民ケーン』（カタルシス6）：</strong>「よくわからん。淡々としすぎだし、意図がわかりづらい。」<br>
+                        <strong>『東京物語』（カタルシス5）：</strong>「フリかと思われた布石ですべてが終わった。淡々と。なにが名作なのか、まだ理解できない。」<br>
+                        <strong>『シャイニング』（カタルシス5）：</strong>「展開がわからん。なぜこんなに人気と言うか有名なのか。昔だからなのか。」<br>
+                        <strong>『カサブランカ』（カタルシス5）：</strong>「もっかい見ないと。王道ラブロマンス、よく覚えていない。」<br>
+                        <strong>『戦場のメリークリスマス』（カタルシス6）：</strong>「もっかい見ないとわからん。」<br>
+                        <strong>『竜馬暗殺』（カタルシス4）：</strong>「何をいってるかわからん、展開も。」</p>
+                    </blockquote>
+
+                    <p>この「よくわからん」「理解できない」という連続した言葉。これは私の無知から来るものではなく、**「私の人生の実存に介入してこない知識（教養）など、ただの情報のゴミである」**という徹底したプラグマティズム（実用主義）の表れである。</p>
+
+                    <p>映画評論家は、「『市民ケーン』のパンフォーカス（撮影技法）が映画を変えた」とか、「『東京物語』のローアングルが美しい」といった文脈（コンテキスト）でこれらの作品を崇める。しかし、私にとって映画は「教養としての歴史の復習」ではない。「なるほど、そういう技術の歴史があったのね」で終わる作品は、博物館のガラスケースに入った骨董品に過ぎないのだ。</p>
+
+                    <p>私が映画に求めているのは、今、現在の私が抱えている仕事の重圧や、夫婦関係のモヤモヤ、社会の理不尽さに対して、**「今日からどうやってこの現実を運転していくか」というヒリヒリとした実弾（武器）**を授けてくれるかどうか、その一点のみである。『カサブランカ』の王道ロマンスも、『シャイニング』のただ男が狂っていくホラーも、過去の遺物としては優れているのかもしれないが、私の人生のコートに引きずり下ろして殴り合えるほどの「現代的な切実さ」を持っていなかったのである。</p>
+
+                    <h2>5. 総括：嘘の焦土に立つ、知的なるハンター</h2>
+
+                    <p>これら20本を超える「世間の名作・大ヒット作」に対する私の容赦ない低評価の数々。それは決してひねくれているわけでも、映画を知らないわけでもない。</p>
+
+                    <p>私は、感動ポルノという名の「感情の搾取」を憎み、予定調和という名の「現実からの逃避」を軽蔑し、文脈なき空中戦を「知性の欠如」として退け、映画史の権威を「博物館の骨董品」として一蹴する。これほどまでに厳重で、凶暴なまでに研ぎ澄まされた「嘘への嗅覚（欺瞞検知器）」を突破できたテキスト（映画）だけが、初めて私の魂のリングへ上がることを許されるのだ。</p>
+
+                    <p>これほどの焼け野原（大量の低評価）を作った上で、それでもなお私が「6〜7点」という及第点を与え、あるいは「8点以上」の殿堂入りを果たした映画たちには、一体どれほどの**「本物の血と泥」**が詰まっているのだろうか。次章（Part 2）では、私がその鋭利な刃物で切り分けた「エリート主義と野生の相克」について、さらなる深層へ採掘を進めていく。</p>
                 </article>
 
                 <!-- ==================== TAB 02: PART 2 ==================== -->
                 <article id="content-part2" class="tab-content prose-custom hidden">
-                    <div class="mb-5 font-sans border-b border-cinema-800 pb-3">
-                        <span class="text-xs font-bold text-cinema-glow tracking-widest uppercase block">DEEP ANALYSIS - PART 2</span>
-                        <h2 class="text-xl font-serif text-white font-bold mt-0.5 leading-tight">評価のボーダーライン「6〜7点」の凡庸さが示す、私の『エリート主義と野生の相克』</h2>
-                    </div>
-
-                    <p>私の映画リストにおいて、最もその本質を雄弁に物語るのは、実は「6点〜7点」というボーダーラインの作品群である。これらの作品は、映像作品として最低限の形は整っている。しかし、私の魂（カタルシス）を根底から揺さぶるには至らなかった「及第点の凡庸さ」を示すスコアだ。</p>
-
-                    <p>ここを細かく解きほぐすと、私の中に**「知的に磨き上げられたエリート主義（スクールスマート）」と「本能的で暴力的な野生（ストリートスマート）」**という、二つの相反する本質が常に激しく火花を散らしていることが見えてくる。私は、汗も血も流さない「温室育ちのインテリ」も、ただ荒れ狂うだけの「知性のない野蛮」も信用しない。その両方の欠落に対して、容赦なく「6〜7点」の烙印を押しているのだ。</p>
-
-                    <h2>1. 『プラダを着た悪魔２』 vs 『プラダを着た悪魔』：時代に抗う強さの欠落</h2>
-                    <p>最もわかりやすい事例が、この姉妹作における私の評価の決定的乖離である。私は1作目にはカタルシス「8」（9かも、と迷う）という高評価を与え、その最後で涙を流しているが、2作目に対しては「6」という冷酷な判定を下している。</p>
-                    <blockquote>
-                        <p><strong>『プラダを着た悪魔（1作目）』：</strong>「最後泣いた。９かなー困る。私たちの話。人生の選択。悪魔の契約もの。」<br><strong>『プラダを着た悪魔２』：</strong>「ナイジェルに仕事を任せるところはぐっと来た。それ以外は耽美でただ金持ちの人脈ゲーム。１の成長物語ではなく、時代に抗う音で人間の強さが描かれない。」</p>
-                    </blockquote>
-                    <p>1作目は、過酷なトップエリートの環境（悪魔の契約）に身を投じ、もがきながら自分の意志で「人生の選択」を勝ち取り、最終的にスマートに自分の人生のハンドルを握り直す「自立と強さ」の物語（私たちの話）であった。<br>しかし、2作目は単に金持ちたちの狭いサークルの中で行われる「耽美でただ金持ちの人脈ゲーム」に終始し、時代や困難に抗う「人間の強さ」が一切描かれていない。私は知性や富を愛するが、それが「本気でもがいて何かを掴み取ろうとする野生（泥臭さ）」を伴わない、安全圏でのお上品なサロン（お行儀の良さ）に成り下がった瞬間、徹底的な退屈を覚えるのである。現実と戦う方法を提示しないテキストは不要なのだ。</p>
-
-                    <h2>2. 安全なファンタジーの拒絶：『シザーハンズ』と『ボディガード』</h2>
-                    <p>同様の「お行儀の良さ」への拒絶は、世間一般ではロマンチックな名作と崇められる『シザーハンズ』や『ボディガード』にも見られる。</p>
-                    <blockquote>
-                        <p><strong>『シザーハンズ』（カタルシス7）：</strong>「こどもむけのいい映画。でぃずにーらしい。」<br><strong>『ボディガード』（カタルシス6）：</strong>「こぎれいなヒーロー映画。ありがち。」<br><strong>『関ヶ原』（カタルシス6）：</strong>「役所と岡田がすごい。誇張も無くシナリオ通りの感じだった。」</p>
-                    </blockquote>
-                    <p>「ディズニーらしい」「こぎれい」「シナリオ通り」。これらの言葉が意味するのは、<strong>「現実の泥臭い摩擦（モヤモヤ）」を漂白した、安全で予定調和なファンタジーへの退屈</strong>である。<br>私は現実世界で仕事の重責を背負い、簡単に正解の見つからない人間関係のハンドルを必死に握り、責任を引き受けている。だからこそ、最初から守られるべき美しいヒロインと、都合よく助けに現れる強くてお利巧なヒーローの構造（カサブランカ、おくりびと等もこの及第点の箱に入る）を見せられると、大人としての知的好奇心を全く刺激されず、「こどもむけ」「ありがち」と切り分けるのである。</p>
-
-                    <h2>3. 『教皇選挙』と『杉原千畝』：葛藤の強さなき「簡単なパッケージ」</h2>
-                    <p>さらに、一見知的に見える作品であっても、葛藤の掘り下げが浅いものは「及第の凡作」として容赦なく落とされる。</p>
-                    <blockquote>
-                        <p><strong>『教皇選挙』（カタルシス7）：</strong>「言うほど傑作だろうか。風刺の仕方が簡単。葛藤の強さがそんなに無い。僕の想像力不足。つぎはもっと楽しめるかも、考察みたから。セリフ裏に駆け引きや、策謀があったのね。」<br><strong>『杉原千畝』（カタルシス6）：</strong>「いい映画でしたけどね、映像的な説得力は特になかったかなー。唐沢は圧巻」</p>
-                    </blockquote>
-                    <p>『教皇選挙』のセリフ裏の駆け引き。それが「考察を見ないと伝わらない」レベルの、お行儀の良い学術的なパズルに留まっていることに、私は失望している。私が必要としているのは、人間が自分の全存在を賭けて立ち上がるときの**「映像的な説得力（突き破る底力）」**である。だからこそ、映画全体の説得力が欠如している『杉原千畝』や、原作やシナリオの枠を1ミリも超えてこない『関ヶ原』に対しては、「いい映画でしたけどね」という冷めた一言で、6〜7点の壁に閉じ込めるのである。</p>
-
-                    <h2>4. 哲学なき「野生（中二病）」の限界：『地獄の黙示録』と『孤狼の血２』</h2>
-                    <p>では、エリート的な退屈さをぶち破るような「暴力や狂気」であれば高評価を下すかといえば、私の「野生」は極めて知的な審美眼によって制御されている。哲学を伴わない単なる暴力や、他者への介入なき自己陶酔的な狂気を、私は最も冷徹に「中二病」と切り捨てる。</p>
-                    <blockquote>
-                        <p><strong>『地獄の黙示録』（カタルシス5）：</strong>「久しぶりに意味わかんなかった。最初の戦争は圧巻だったけど中二病はどうぞ」<br><strong>『孤狼の血 LEVEL2』（カタルシス6）：</strong>「ただの鈴木亮平映画に成り下がった。」<br><strong>『クローズZERO』（カタルシス7）：</strong>「山田孝之がとにかくかっこいい映画。爽快感。それだけ。」</p>
-                    </blockquote>
-                    <p>大義もなく、他者への責任も引き受けず、ただ自分自身の脳内の深淵（空中戦）に引きこもって狂気を気取る姿は、実社会で必死に戦う大人からすれば「ただの甘え」に過ぎない。1作目の『孤狼の血（カタルシス8）』で見せた「きれいごとじゃやっていけない現実の中で、自分のスタイルを貫くタフさ」を完全に失い、単なる悪役の狂暴な演技（鈴木亮平映画）に終始した2作目に対しては、一気に「6点」までスコアを落とす。私は、知性（エリート）と衝動（野生）が、高次元で激しく摩擦を起こす瞬間の火花（カタルシス）を求めているのであり、どちらか一方が単独で暴走したお行儀の悪いテキストには、魂のリングへ上がる権利すら与えないのである。</p>
-                </article>
-
-                <!-- ==================== TAB 03: PART 3 ==================== -->
-                <article id="content-part3" class="tab-content prose-custom hidden">
-                    <div class="mb-5 font-sans border-b border-cinema-800 pb-3">
-                        <span class="text-xs font-bold text-cinema-glow tracking-widest uppercase block">DEEP ANALYSIS - PART 3</span>
-                        <h2 class="text-xl font-serif text-white font-bold mt-0.5 leading-tight">怒りと拒絶。私が絶対に許せない『表現の罪』と『綺麗事の正体』</h2>
-                    </div>
-
-                    <p>私のレビューの全貌を深く採掘していくと、カタルシス「1〜5」という極端な低スコア帯に、**「映画という表現手段が犯した欺瞞への、明確な怒りと拒絶」**が火山岩のようにゴロゴロと転がっているのが見える。私がここで示している拒絶は、映画の出来に対する怒りではなく、**「他者と関わること、および生老病死の痛み」という神聖な現実に対する、作り手の浅薄な搾取への怒り**である。</p>
-
-                    <h2>1. 第一の罪：「美大生のこじらせ」という名の中身のない深淵</h2>
-                    <p>私が最も容赦のない言葉で切り捨てるのが、世間的には「繊細で、文学的で、どこかお洒落な絶望」を気取った、サブカルチャー的な作品群である。</p>
-                    <blockquote>
-                        <p><strong>『わたしを離さないで』（カタルシス2）：</strong>「子どもだまし、美大生が作った中学生用」<br><strong>『ベロニカは死ぬことにした』（カタルシス6・総合5）：</strong>「美大生作のカッコーの巣の上で。こじらせている。」</p>
-                    </blockquote>
-                    <p>「美大生が作った」という私の秀逸なメタファー。これらの作品が描いている「絶望」は、本当の地獄を味わったことのないお上品な人間が、頭の中（空中戦）だけで捏造した「ファッションとしての死」「お洒落な悲劇」に過ぎない。そこには、他者が実存として自分の境界線を侵食してくるような「リアルな恐怖（介入）」もなければ、生身の人間が泥水をすすってでも生き延びようとするような「野生の体温」も存在しない。<br>単に「儚い設定の中で、繊細な私が傷ついている姿（自己陶酔）」を耽美な映像で包み、それを「文学」と呼ぶ。その浅はかさは、日々現実の生傷と闘い、責任を背負っている私から見れば「子どもだまし」「こじらせ」以外の何物でもない。人間という存在を、自らの「感性の高さ」を自慢するためのただのアクセサリー（記号）として消費すること。これが、私が最も軽蔑する第一の表現の罪である。</p>
-
-                    <h2>2. 第二の罪：「無垢」と「感動」の暴力的なマーケティング</h2>
-                    <p>次に私が激しい拒絶を示すのは、人間の死や難病、あるいは恋愛という極めて切実なテーマから「ドロドロとしたエゴ」をすべて排除し、都合の良い「無垢な感動」としてパッケージして押し売ってくる作品である。</p>
-                    <blockquote>
-                        <p><strong>『君の膵臓をたべたい』（カタルシス6）：</strong>「浜辺美波のういういしさが押し売り過ぎてきつい。膵臓を食べたら治るって言説との構成はうまかった」<br><strong>『アネット』（カタルシス4）：</strong>「ずっと謎ミュージカル。マリオンコティヤール好きなのに。」<br><strong>『湯を沸かすほどの熱い愛』（カタルシス7）：</strong>「本当の宮沢りえはもっと美しい。消費しちゃダメ。肝っ玉母ちゃんにしすぎ。」</p>
-                    </blockquote>
-                    <p>難病のヒロインの死を描いて大ヒットした『君の膵臓をたべたい』。その映画全体の構成力を認めつつも、ヒロインのういういしさを「押し売り」と感じた瞬間、私の心は完全にシャットダウンする。それは、死を前にした人間の弱さや醜さを一切排除し、「男にとって都合の良い無垢な少女のまま死んであげる」という、作り手がマーケティング思考で仕掛けた「おためごかし」を嗅ぎ取っているからである。<br>また、絶賛された邦画『湯を沸かすほどの熱い愛』に対しても、「宮沢りえを消費しちゃダメ。肝っ玉母ちゃんにしすぎ」と警告している。他者のために死ぬまで尽くす「完璧な母親」という都合の良い虚像を作り上げ、そこで観客の涙を絞り取ろうとする感情の榨取に、私の倫理観は真っ向から抗議の声を上げる。私は大好きなマリオン・コティヤールが出ていようとも、中身のない空中戦ミュージカル（『アネット』）の中で彼女がただの記号として「消費」されていると感じた瞬間、スッと心を閉ざすのである。無垢や美談という名の「安全な感動」の押し売りは、私にとって人生の時間を無駄にする悪質な詐欺に等しい。</p>
-
-                    <h2>3. 第三の罪：文脈なき「ただの記号（BL、空中戦）」の羅列</h2>
-                    <p>私が映画に求めるのは、どこまでも「生々しい他者との関係性の摩擦（介入）」である。それゆえ、その前段階の葛藤やプロセスの文脈をすべて無視し、ただ衝撃的な映像や性的・感情的記号（ハレ）だけを唐突に羅列してくる作品を、私は徹底的に拒絶する。</p>
-                    <blockquote>
-                        <p><strong>『スプリング・フィーバー』（カタルシス5）：</strong>「BLが生々しすぎて見れず。」<br><strong>『華麗なるギャツビー』（カタルシス5）：</strong>「空中戦をずっとやられてた感じ。共同幻想。」<br><strong>『エターナル・サンシャイン』（カタルシス6）：</strong>「きれいごとじゃないところはよかったけど、何も感情移入はできなかった。僕に激情な恋愛経験が無いのかな。感情的に人を傷つけてしまった後悔を持っている人へ」</p>
-                    </blockquote>
-                    <p>『パルプ・フィクション』におけるドラッグやバイオレンスの生々しさは、その根底に「底辺を生きる人間たちの体温」があるからこそ、美的な「粋」として成立する。しかし、『スプリング・フィーバー』のBL描写に対して「生々しすぎて見れず」と距離を置いたのは、そこに至るまでの「精神的な駆け引き（知・機）」や「他者との致命的な介入」という人間的葛藤の文脈がないまま、ただ生肉のような肉体（記号）だけが提示されていると感じたからである。また、『ギャツビー』の絢爛豪華な映像美に対しても、人間の切実な痛みが置き去りにされた「空中戦（共同幻想）」と看破する。人間がなぜそこまで傷つき、なぜその選択に至ったのかという、血の通った理由（ケの蓄積）がない記号の空中戦に対しては、1ミリも自らのカタルシスの門を開けないのである。</p>
-                </article>
-
-                <!-- ==================== TAB 04: PART 4 ==================== -->
-                <article id="content-part4" class="tab-content prose-custom hidden">
-                    <div class="mb-5 font-sans border-b border-cinema-800 pb-3">
-                        <span class="text-xs font-bold text-cinema-glow tracking-widest uppercase block">DEEP ANALYSIS - PART 4</span>
-                        <h2 class="text-xl font-serif text-white font-bold mt-0.5 leading-tight">究極のカタルシスの深層。魂を明け渡した「9〜10点」の共通構造</h2>
-                    </div>
-
-                    <p>これほどまでにガードが固く、世間の綺麗事（嘘）を鋭利な刃物で一刀両断にする私が、**完全に自らの武装を解除し、魂を明け渡して嗚咽し、深い納得感とともに「カタルシス9〜10」を叩き出した作品群。**</p>
-
-                    <p>『ミッドナイト・イン・パリ』（10）、『マディソン郡の橋』（9）、『恋愛小説家』（9）、『祭りの準備』（9）、『ダークナイト』（9）、『スティング』（9）、『きっと、うまくいく』（9）、『生きる』（9）、そして9か迷うと苦悶した『ドライブ・マイ・カー』（8.9）と『ミリオンダラー・ベイビー』（8.9）。</p>
-
-                    <p>これら、私のパーソナルな神殿に君臨する絶対的マスターピースたちには、ある共通した**「極めてハードで美しい、魂の再生プロセス」**が存在する。それは、生温い「癒やし」などではない。「徹底的なえぐり（破壊）」の末に、「剥き出しの人間性（野生）」を直視し、最後は「昨日とは違う自分になり、現実と戦うための武器を手にして自立する」という凄絶な儀式なのだ。</p>
-
-                    <h2>1. 第一段階：私の見たくない図星を徹底的に破壊する「知的なる暴力（えぐり）」</h2>
-                    <p>私が絶対的な10点満点を捧げ、完全に魂を「えぐられた」と白状した『ミッドナイト・イン・パリ』。この映画の核心について、私はこう記している。</p>
-                    <blockquote>
-                        <p><strong>私の本音：</strong>「えぐられ過ぎた。痛いとこついてくるくせに、慰めてくれるし、納得感が持てる。マリオンコティヤールやばい。一番妖艶でミステリアスで美しい。」</p>
-                    </blockquote>
-                    <p>私は、最初から耳元で甘い言葉を囁き、優しくハグしてくるような「安価な癒やし」を一切信用しない。真のカタルシスに至るためには、まず、自分が必死に保っているエゴ、知的な虚栄心、そして現実からの逃避衝動を、徹底的に解体（えぐり）されなければならない。<br>『ミッドナイト・イン・パリ』の主人公は、偉大な「黄金時代（過去）」に逃避し、現実の冷え切った関係（婚約者）から目を背けようとする。映画はそんな彼の「見たくない図星（現実逃避）」を、これ以上ない知的なユーモアと残酷さで容赦なく突き刺す。その「徹底的なえぐり（真剣勝負）」を引き受け、自分自身が一度木端微塵に破壊されて初めて、私はその先にある「本当の慰め（再生）」を受け入れる心の門を開くのである。</p>
-
-                    <h2>2. 第二段階：社会性の皮膜をブチ破る「剥き出しの野生（情念）」の直視</h2>
-                    <p>解体のあとに流れ込んでくるのは、お上品なシステムや社会秩序がひた隠しにしている、人間の「どうしようもない欲望、熱情、そして本質（野生）」である。</p>
-                    <blockquote>
-                        <p><strong>『祭りの準備』（9）：</strong>「リアルと爽快感。最後に傍若無人の人が称えて東京で一旗揚げてこいって仲間が最高過ぎた。むかしの漁港のリアルを知れた。人類の本質。現代は社会性が人間を覆い過ぎている。」<br><strong>『時計じかけのオレンジ』（9）：</strong>「狂気と鮮烈と社会のひずみ。アート的な狂気。強制更生はいいのか。人間の尊厳とは。」<br><strong>『マディソン郡の橋』（9）：</strong>「もう最後よ最後。雨の車のシーン。あれですべてやられた。クリントとメリルがすごすぎる」</p>
-                    </blockquote>
-                    <p>「6〜7点」の及第の映画たちに足りなかったもの。それはこの**「社会性の分厚い膜を突き破る、人間の生のエネルギー（野生）」**である。<br>私は『祭りの準備』の漁港に生きる、お行儀の悪い、しかし生々しい人間の本質に心からの爽快感を覚える。現代の私たちが、いかに「お利巧な社会性」に縛られ、自らの野生を去勢されているかを知っているからである。その野生が、暴力ではなく「愛と人生の摩擦」として火花を散らした極致が、『マディソン郡の橋』の、あの語り継がれる「雨の車のドアノブのシーン」である。すべてを捨てて、野生（ハレの衝動）に身を任せて彼について行きたいという、理性を吹き飛ばすほどの凄絶な愛のうねり。しかし彼女は最後の一線で、自らが選び、引き受けた日常（ケ）にとどまる。この、抗えない野生の衝動と、それを必死に抑え込む人間の凄絶な知性（理性）の摩擦こそが、私の魂のヒューズを一瞬で吹き飛ばし、「あれですべてやられた」という、一生消えない焼き印を押したのである。</p>
-
-                    <h2>3. 第三段階：ヒーローの解体と「無敵の人」の狂気の系譜</h2>
-                    <p>さらに、人間の「闇の極致」に対する私の知的な視座は、アメコミ映画への評価において最も鋭く表出する。私は『バッドマン』を単なる「ちょっとしたヒーローもの」としてカタルシス「7」で片付けている。無傷で悪を倒す綺麗事のファンタジーに、私の心は動かない。しかし、同じバットマンを扱った『ダークナイト』には「9」を与え、こう絶賛する。</p>
-                    <blockquote>
-                        <p><strong>『ダークナイト』（9）：</strong>「葛藤。ヒーロー、転落。覚悟。醜悪さ、復讐鬼への変貌、葛藤がすばらしい。映像もやばい」</p>
-                    </blockquote>
-                    <p>正義が醜悪な復讐鬼へと転落し、泥にまみれながら覚悟を決める姿。そこに初めて私はカタルシスを見出す。さらに、その対極の悪役である『JOKER』に対し、私は『タクシードライバー』から『キング・オブ・コメディ』へと続く**「現代の狂気の系譜」**を完璧に言語化し、一本の線で繋いでいる。</p>
-                    <blockquote>
-                        <p><strong>『タクシードライバー』（8）：</strong>「都会のおじさん問題。リアルすぎる。セリフでなく、映像的。」<br><strong>『キング・オブ・コメディ』（8）：</strong>「ジョーカーの原点。妄想癖の人間の怖さを感じる。今の時代にもっと増えている。」<br><strong>『JOKER』（9）：</strong>「虐げられる社会構造、無敵の人が作られるレシピ(環境、遺伝子)が書いてある。圧倒的リアル。アメリカの縮図。狂気の美しいダンス。」</p>
-                    </blockquote>
-                    <p>社会の周縁に追いやられた孤独な男の疎外感（タクシードライバー）が、承認欲求を拗らせて妄想に走り（キング・オブ・コメディ）、やがて環境と遺伝子の最悪の掛け合わせによって「無敵の人」というモンスター（JOKER）として羽化する。私はこの、**「社会がいかにして狂気を錬成するかという生々しいレシピ」**に圧倒的なリアリティを感じている。薄っぺらい善悪の二元論を破壊し、狂気の底にある「人間社会の構造的欠陥」をえぐり出すテキストとの対峙。これもまた、魂を浄化させるための極めて高度な知的作業（野生の直視）なのである。</p>
-
-                    <h2>4. 第四段階：生き方を変え、「ベターマン」を目指すという究極の自立</h2>
-                    <p>えぐられ、野生を直視した上で、私が最後に手にするカタルシスの正体。それは、都合の良い奇跡やハッピーエンドといったファンタジー（嘘）ではない。世界は残酷で、人間は醜く、他者は永遠にわかり合えないという**「絶望（リアル）」をすべて引き受けた上で、それでも昨日とは違う自分になり、現実と戦うための武器を手にする力強い「自立」**である。</p>
-                    <blockquote>
-                        <p><strong>『恋愛小説家』（9）：</strong>「美と醜 リアルと欲望 総じて美 感情描写すごい。大人の葛藤、恋愛。グッドマンになりたくなる。ベターマンに。」<br><strong>『ミッドナイト・イン・パリ』（10）：</strong>（主人公が過去の偉人にすがるのをやめ、雨のパリの現実を歩き出す自立）<br><strong>『生きる』（9）：</strong>「志村喬の名演。ラストの変わらない現実がリアルで共感を」</p>
-                    </blockquote>
-                    <p>『恋愛小説家』の主人公メルヴィンは、最悪の強迫神経症で周囲を傷つける醜い男である。しかし彼は、他者と本当に関わる痛みの中で、「彼女のために、自分はもっと昨日よりより良い人間（A Better Man）になりたい」と願う。この「昨日とは違う自分（ベターマン）への希求」こそが、私のカタルシスの終着点である。<br>他者が自分の人生に介入してくる恐怖を引き受け（ドライブ・マイ・カー）、世界がどれほど理不尽であっても淡々と仕事をこなして人を救い（シンドラーのリスト）、変わらない現実の中で最善を尽くす（生きる）。この「誰の力も借りずに、自分の足で雨のパリを歩き出す自立」の瞬間に立ち会うとき、私はこの残酷な世界を生き抜くための圧倒的な武器と納得感（カタルシス）を得るのである。</p>
-                </article>
-
-                <!-- ==================== TAB 05: PART 5 ==================== -->
-                <article id="content-part5" class="tab-content prose-custom hidden">
-                    <div class="mb-5 font-sans border-b border-cinema-800 pb-3">
-                        <span class="text-xs font-bold text-cinema-glow tracking-widest uppercase block">DEEP ANALYSIS - PART 5</span>
-                        <h2 class="text-xl font-serif text-white font-bold mt-0.5 leading-tight">知的なるハンターの「未来の航海図」と、次に闘うべき3つのテキスト</h2>
-                    </div>
-
-                    <p>この壮大な「魂の深層採掘プロジェクト」を通して、私が映画館の暗闇の中で、本当は何と闘い、何を求めていたのかが完全に言語化され、骨格となって目の前に現れた。<br>私は単にストーリーを消費していたのではない。自らの知性と感性のすべてを研ぎ澄まし、スクリーンという名のリングに「残酷な現実（リアル）」を引っ張り出し、生身の魂で殴り合っていたのである。その血みどろの対話を経て、「昨日とは違う自分になるための武器」を獲得していく。それが、私の映画鑑賞の正体だ。</p>
-
-                    <p>では、この研ぎ澄まされた審美眼（アルゴリズム）と、「ベターマンでありたい」という誇り高いマニフェストを胸に、私はこれからどのようなテーマにアンテナを立てて生きていくべきか。そして、次に私の魂のリングへ上がるべき「3つの強力なテキスト（対戦相手）」をここに提示する。</p>
-
-                    <h2>【未来へのアンテナ】私がこれから人生のコートで掘り下げるべき3つのテーマ</h2>
-
-                    <h3>アンテナ1：「介入を許可する」という究極の恐怖と、その先にある愛</h3>
-                    <p>私は本質的に、自分の世界、自分のスケジュール、自分の評価軸を完璧にコントロールしたいという強固なエゴ（スクールスマート）を持っている。しかし、私の魂が真に震えるのは、『ドライブ・マイ・カー』で書いた「私の人生に介入してみろ、命令形のドライブマイカー」の境地、すなわち**「コントロールを手放し、他者が自分の人生の領域をメチャクチャに荒らしに来ること」を許可した瞬間**である。今後の人生のコートにおいて、私は自らのガードをどこまで緩め、他者からの「致命的な介入」を受け入れ、その摩擦から生まれる本当のベターマン（より良き人間）への進化を楽しめるか。これが、最大の知的冒険となるだろう。</p>
-
-                    <h3>アンテナ2：「日常（ケ）」の完璧な反復の中にある、静かなる狂気の観察</h3>
-                    <p>『PERFECT DAYS』で最高評価を捧げた「毎日をただ整えて過ごす反復の美学」。私は、日々のルーティンやトレーニングをストイックにこなし、その整えられた反復の中に宿る「禅の精神」を大切にしている。しかし、その反復のすぐ隣には、いつでも『時計仕掛けのオレンジ』や『JOKER』のような「狂気の深淵」が大きく口を開けている。今後の私は、平穏で秩序ある日常（ケ）を完璧に維持しながらも、そのすぐ足元にある「野生の衝動（ハレ）」の気配を、上質なホラーを愛でるように冷静に観察し、その陰陽のコントラストを楽しむ知性を磨いていくだろう。</p>
-
-                    <h3>アンテナ3：「泥臭い見苦しさ」を上質なユーモアで笑い飛ばす、粋なタフさ</h3>
-                    <p>『恋愛小説家』のメルヴィンや、『スティング』のポール・ニューマンのような、お行儀の良い正義（綺麗事）とは程遠い、不器用で醜悪な、しかし圧倒的にチャーミングで「粋」な大人たちの生き様。私はもはや、非の打ち所がない完璧なヒーローなど求めていない。泥まみれになり、時には見苦しく醜態をさらしながらも、磨き抜かれた知性とユーモア（アニー・ホール、それでも恋するバルセロナのようなアレン的機知）でその見苦しささえも粋に笑い飛ばし、人生のコートに立ち続ける。この「しなやかで、絶対に折れないストリート・スマートなタフさ」こそが、私がこれから獲得していくべき大人の完成形である。</p>
-
-                    <h2>【次なる闘いのリング】私の魂を激しく揺さぶり、再生させる3つの傑作</h2>
-
-                    <h3>1. 『ファントム・スレッド』 (Phantom Thread, 2017)</h3>
-                    <p><strong>【闘いのテーマ】「私の人生に介入してみろ」の、美しくも最狂の極限回答</strong></p>
-                    <p>完璧な秩序とコントロールの中でしか生きられない偏屈な天才仕立て屋と、彼の世界を徹底的に破壊し、介入しようとする若い女。二人が行き着く「主導権（コントロール）の恐るべき奪い合いと、究極の妥協点」。この、相手の境界線に毒薬（介入）を流し込むような凄絶な恋愛劇を見たとき、あなたは「美と醜、リアルと欲望、総じて美」という言葉を、震えながら再び口にすることになるだろう。</p>
-
-                    <h3>2. 『バードマン あるいは（無知がもたらす予期せぬ奇跡）』 (Birdman, 2014)</h3>
-                    <p><strong>【闘いのテーマ】「知的虚栄心（エゴ）」の完全なる崩壊と、野生への回帰</strong></p>
-                    <p>かつての栄光（虚栄心）にしがみつき、舞台での芸術的成功を夢見て自滅していく老俳優。彼の見たくない図星（エゴ）を、ワンカット風の圧倒的なカメラワークとドラムのサウンド（音響による陰陽の緊張感）が執拗にえぐり出す。彼がすべてを失った果てに、窓から飛び出して手にする「ささやかですが、圧倒的に力強い野生の自立」の瞬間に、あなたの魂は強烈なカタルシスで満たされるはずである。</p>
-
-                    <h3>3. 『パターソン』 (Paterson, 2016)</h3>
-                    <p><strong>【闘いのテーマ】『PERFECT DAYS』に続く、反復の美学の最終到達点</strong></p>
-                    <p>ニュージャージー州の小さな街で、毎日バスの運転手として同じルートを走り、同じようにビールを飲み、愛犬と散歩し、ただ詩を書くだけの男。何一つ大事件は起きないが、その「完璧な反復」の中に宿る、宇宙的なまでに豊かな禅の境地。世界と無駄に闘うことをやめ、それでも「ただ、自分の足で現実（いま）を愛おしく生きる」という究極の納得感（生きるための武器）が、この静かな映画の中にすべて用意されている。</p>
-                </article>
-
-                <!-- ==================== TAB 07: DATABASE ==================== -->
-                <article id="content-db" class="tab-content hidden">
-                    <div class="mb-5 font-sans">
-                        <span class="text-xs font-bold text-slate-400 tracking-widest uppercase block">THE SOURCE DATA</span>
-                        <h2 class="text-xl font-serif text-white font-bold mt-0.5 leading-tight"><i class="fa-solid fa-database text-cinema-glow mr-1.5"></i> 【出典】スプレッドシート原本データベース</h2>
-                        <p class="text-xs text-slate-400 mt-1 font-sans">過去に観測したすべての映画データ原本です。検索・ソートが可能です。</p>
-                    </div>
-
-                    <!-- Search & Filters -->
-                    <div class="flex flex-col sm:flex-row gap-2 mb-4">
-                        <div class="flex-1">
-                            <input type="text" id="db-search" oninput="filterDatabase()" placeholder="タイトルやコメントを検索..." class="w-full bg-cinema-950 border border-cinema-800 text-white rounded px-3 py-1.5 text-xs focus:outline-none focus:border-cinema-glow font-sans">
-                        </div>
-                        <div class="shrink-0">
-                            <select id="db-filter-class" onchange="filterDatabase()" class="w-full sm:w-auto bg-cinema-950 border border-cinema-800 text-slate-300 rounded px-3 py-1.5 text-xs focus:outline-none focus:border-cinema-glow font-sans">
-                                <option value="all">すべてのスコア帯</option>
-                                <option value="90">カタルシス「9〜10」（90点台）</option>
-                                <option value="80">カタルシス「8」（80点台）</option>
-                                <option value="60">カタルシス「6〜7」（60-70点台）</option>
-                                <option value="under">カタルシス「5以下」</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Database Table Container -->
-                    <div class="overflow-x-auto bg-cinema-950 border border-cinema-800 rounded-lg">
-                        <table class="w-full text-left text-xs font-sans text-slate-300 min-w-[700px]">
-                            <thead class="bg-cinema-900 text-slate-400 border-b border-cinema-800 text-[10px] uppercase tracking-wider font-semibold">
-                                <tr>
-                                    <th class="py-2.5 px-3">タイトル</th>
-                                    <th class="py-2.5 px-1.5 text-center text-cinema-glow">カタ</th>
-                                    <th class="py-2.5 px-1.5 text-center">転倒</th>
-                                    <th class="py-2.5 px-1.5 text-center">知・機</th>
-                                    <th class="py-2.5 px-1.5 text-center">再見</th>
-                                    <th class="py-2.5 px-1.5 text-center">サウンド</th>
-                                    <th class="py-2.5 px-1.5 text-center">まと</th>
-                                    <th class="py-2.5 px-1.5 text-center">映像美</th>
-                                    <th class="py-2.5 px-3 w-1/2">コメント</th>
-                                </tr>
-                            </thead>
-                            <tbody id="db-tbody" class="divide-y divide-cinema-900/50">
-                                <!-- Dynamic rows from JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </article>
-
-            </div>
-        </main>
-    </div>
-
-    <!-- Active Tab Script & Movie DB JSON -->
-    <script>
-        // Full spreadsheet database embedded natively as JSON so external files are obsolete
-        const movieDatabase = [
-            { title: "シリアナ", metrics: [7, 7, 7, 6, 7, 5, 7], comment: "4つの視点。合併とCIAとアナリストとテロリスト。緊張感がずっとあったけど複雑すぎ。解読することが楽しいおじさんへ。" },
-            { title: "地獄の黙示録", metrics: [5, 6, 6, 7, 7, 5, 5], comment: "久しぶりに意味わかんなかった。最初の戦争は圧巻だったけど中二病はどうぞ" },
-            { title: "海賊と呼ばれた男", metrics: [7, 8, 7, 7, 8, 7, 6], comment: "いい映画。常識を覆る底力を得る。演技にいくつかあるし特殊メイクには無理がある。突き破る力。社員を想う社長。ギャンブラーへ。" },
-            { title: "杉原千畝", metrics: [6, 7, 7, 6, 7, 6, 6], comment: "いい映画でしたけどね、映像的な説得力は特になかったかなー。唐沢は圧巻。人を救う、世界に誇る日本人を見たい人へ。" },
-            { title: "シンドラーのリスト", metrics: [7, 8, 8, 6, 7, 7, 7], comment: "リアルを描いていた。最後に後悔するところはぐっと来た。バッジだけで2人救えたのに。世渡り、善" },
-            { title: "日本独立", metrics: [6, 7, 8, 6, 6, 7, 6], comment: "配役ミス。ドキュメンタリーとしては悪くない。もっと切実にできる。" },
-            { title: "トレインスポッティング", metrics: [7, 6, 7, 7, 7, 6, 8], comment: "パルプフィクション的鮮烈映像的。最後のたばこの象徴的な心理描写など映像的スリル、超越系へ。" },
-            { title: "バッドマン", metrics: [7, 6, 6, 6, 7, 0, 0], comment: "ちょっとしたヒーローもの" },
-            { title: "ダークナイト", metrics: [9, 8, 7, 9, 7, 8, 9], comment: "葛藤。ヒーロー、転落。覚悟。醜悪さ、復讐鬼への変貌、葛藤がすばらしい。映像もやばい" },
-            { title: "スティング", metrics: [9, 7, 8, 8, 8, 9, 9], comment: "爽快、とにかくポールがイケメン。どんでん返し。すっきり系。粋な掛け合いやリズムが心地よ過ぎた。テーマも無いし、価値転倒が無くてこれほど面白いのは初めてかも。" },
-            { title: "ロスト・イン・トランスレーション", metrics: [7, 6, 6, 7, 6, 7, 7], comment: "ずーっとタメが長い。そのじわじわのタメを楽しむもの。" },
-            { title: "マディソン郡の橋", metrics: [9, 8, 7, 7, 8, 7, 8], comment: "もう最後よ最後。雨の車のシーン。あれですべてやられた。クリントとメリルがすごすぎる" },
-            { title: "それでも恋するバルセロナ", metrics: [7, 8, 8, 6, 7, 8, 8], comment: "ウッディアレン爆発。熱情は一時のもの。対話大事。" },
-            { title: "トゥルーマン・ショー", metrics: [8, 7, 6, 6, 7, 7, 8], comment: "9か迷うほど。最後のセリフを奪い返し、尊厳を取り返すところがよい。ジムキャリーすごい" },
-            { title: "her/世界でひとつの彼女", metrics: [7, 8, 8, 7, 6, 6, 7], comment: "とても考えさせられた。１３年前とは思えない。生身と知性は引きはがして捉えられるのか。" },
-            { title: "市民ケーン", metrics: [6, 6, 6, 5, 5, 4, 6], comment: "よくわからん。淡々としすぎだし、意図がわかりづらい。" },
-            { title: "シティ・オブ・ゴッド", metrics: [8, 8, 8, 8, 7, 7, 8], comment: "あるスラム街の日常。好きに熱中する人の勝利。こんな場所もまだ世界にある。" },
-            { title: "教皇選挙", metrics: [7, 7, 7, 6, 8, 7, 8], comment: "言うほど傑作だろうか。風刺の仕方が簡単。葛藤の強さがそんなに無い。僕の想像力不足。つぎはもっと楽しめるかも、考察みたから。セリフ裏に駆け引きや、策謀があったのね。" },
-            { title: "perfect days", metrics: [8, 10, 8, 10, 8, 9, 9], comment: "毎日をただ整えて過ごす。反復の美学。素晴らしい.メッセージ。もっかい見る。9かも。役所広司の満足感溢れる表情が忘れられない。" },
-            { title: "ブエナ・ビスタ・ソシアル・クラブ", metrics: [6, 7, 7, 5, 8, 6, 7], comment: "音楽のドキュメンタリーだけど音楽のジャンル自体に楽しめず。" },
-            { title: "se7en", metrics: [8, 7, 8, 9, 9, 9, 9], comment: "雰囲気作りがすごい。不気味で暗くて赤黒くさびてるかっこいい感じ。最後の展開はなんとなく読めたけど。" },
-            { title: "ドライブ・マイ・カー", metrics: [8, 8, 8, 9, 7, 9, 7], comment: "コントロールしたい自分、でも向き合って他者と関係する、私の人生に介入してみろ、命令形のドライブマイカー。９か迷う" },
-            { title: "キング・オブ・コメディ", metrics: [8, 8, 7, 7, 8, 8, 8], comment: "ジョーカーの原点。妄想癖の人間の怖さを感じる。今の時代にもっと増えている。行動力が無いだけで。いるよこういうの。怖い。" },
-            { title: "プラダを着た悪魔２", metrics: [6, 6, 7, 6, 7, 7, 8], comment: "ナイジェルに仕事を任せるところはぐっと来た。それ以外は耽美でただ金持ちの人脈ゲーム。１の成長物語ではなく、時代に抗う音で人間の強さがあ描かれない。" },
-            { title: "関ヶ原", metrics: [6, 6, 7, 6, 7, 6, 7], comment: "役所と岡田がすごい。誇張も無くシナリオ通りの感じだった。" },
-            { title: "ミリオンダラー・ベイビー", metrics: [8, 8, 7, 8, 8, 9, 8], comment: "辛い。現実の悪いところをえぐりだしている。俺でもそうする。辛い世界を楽しく適度に責任感持って生きるしかない。９か迷う" },
-            { title: "プラダを着た悪魔", metrics: [8, 7, 7, 7, 8, 9, 9], comment: "最後泣いた。９かなー困る。私たちの話。２はすごい人の話。人生の選択。悪魔の契約もの。" },
-            { title: "バガー・ヴァンスの伝説", metrics: [7, 8, 6, 7, 7, 7, 7], comment: "良作品。可もなく不可もなく。最後いなくなるところちょっとバガーが小躍りしているところが粋だった。今に集中" },
-            { title: "明日に向かって撃て！", metrics: [7, 6, 6, 7, 9, 7, 9], comment: "粋な掛け合い。吹き替えと英字幕でも見てみたい。サウンドがおしゃれでポップな挿入が陰陽をうまくしている。スティングのほうが全然好きだなあ" },
-            { title: "ナイトクローラー", metrics: [7, 7, 7, 6, 6, 7, 7], comment: "素直で快活、持たざる者が闇の中で知恵と行動力を持って暗い未来を切り開く！" },
-            { title: "アイ・アム・サム", metrics: [6, 6, 6, 5, 7, 6, 5], comment: "フォレストガンプの二番煎じ" },
-            { title: "ビフォア・サンライズ", metrics: [8, 6, 6, 7, 6, 9, 7], comment: "刹那の熱風、旅に出たい。非日常。うらやましい" },
-            { title: "グッド・ウィル・ハンティング", metrics: [8, 8, 8, 8, 7, 8, 7], comment: "not your fault。これは響いた。仲間も最高。理解してくれる人との本音での対話。ギフテッドとのむきあいかた" },
-            { title: "最強のふたり", metrics: [7, 7, 7, 8, 8, 8, 7], comment: "爽快。皮肉。いい話や。杓子定規はダメ" },
-            { title: "リトル・ショップ・オブ・ホラーズ", metrics: [6, 4, 5, 6, 6, 6, 7], comment: "なんやねん。紙芝居みたいだった。こどもむけ？" },
-            { title: "郵便配達は二度ベルを鳴らす", metrics: [7, 6, 7, 8, 7, 6, 9], comment: "襲うまでのムンムンの演技がやばい、最後さえよければ８か。主演二人の空気ヤバイ。" },
-            { title: "風と共に去りぬ", metrics: [7, 7, 8, 7, 8, 7, 8], comment: "前半は９、最高。後半どろっとろ。レッドが終始かっこいい。前半ラストの大根から立ち上がるカットは久々に震えた。" },
-            { title: "若妻の匂い", metrics: [7, 8, 6, 8, 8, 8, 9], comment: "暗黙知、あんにゅい、意識下の欲望" },
-            { title: "楊貴妃", metrics: [6, 7, 6, 5, 7, 7, 8], comment: "とにかく美しい絵でした" },
-            { title: "国宝", metrics: [8, 7, 7, 7, 8, 6, 9], comment: "とにかく物分かりがよすぎでお利巧、もっともっとできた映画。悪魔との契約やドロドロの描写なさすぎ。きれいすぎるよこんなん。" },
-            { title: "パラサイト 半地下の家族", metrics: [6, 6, 6, 7, 7, 6, 7], comment: "めちゃくちゃだけど、映像でやりたいことやってる感がいい。" },
-            { title: "ヤクザと家族 The Family", metrics: [7, 7, 7, 6, 7, 8, 7], comment: "ヤクザ寂れている。リアル。もっと行き場のない人たちがあったかくなれる場所があったらいいな。誰も悪くない。遺伝子と環境が人を作る。" },
-            { title: "孤狼の血", metrics: [8, 6, 7, 6, 6, 8, 8], comment: "役所広司が演技派すぎる。きれいごとじゃやっていけない。その人その人のスタイルを貫く。かっこいい。" },
-            { title: "孤狼の血 LEVEL2", metrics: [6, 6, 5, 5, 7, 6, 8], comment: "ただの鈴木亮平映画に成り下がった。" },
-            { title: "ニューオーダー", metrics: [8, 8, 7, 8, 7, 8, 8], comment: "革命のリアル。嘘のような本当。９でもいい。陰謀。残酷。日本もマジで他人ごとじゃない。権力者のマッチポンプ。" },
-            { title: "ユージュアル・サスペクツ", metrics: [6, 8, 7, 8, 7, 9, 6], comment: "作業しながら見たからかなーあんまりなんか。もっかい見るか" },
-            { title: "湯を沸かすほどの熱い愛", metrics: [7, 6, 5, 6, 6, 8, 7], comment: "本当の宮沢りえはもっと美しい。消費しちゃダメ。肝っ玉母ちゃんにしすぎ。" },
-            { title: "タクシードライバー", metrics: [8, 8, 7, 9, 8, 9, 7], comment: "演技派デニーロ、リアルすぎる。都会のおじさん問題。セリフでなく、映像的。癖になる。" },
-            { title: "エターナル・サンシャイン", metrics: [6, 6, 5, 8, 6, 6, 6], comment: "きれいごとじゃないところはよかったけど、何も感情移入はできなかった。僕に激情な恋愛経験が無いのかな。感情的に人を傷つけてしまった後悔を持っている人へ" },
-            { title: "LA LA LAND", metrics: [2, 0, 0, 0, 0, 0, 0], comment: "能天気すぎて13分で心が折れてみるのをやめてしまいました。また能天気なときにチャレンジしたいと思います" },
-            { title: "アバウト・シュミット", metrics: [7, 6, 6, 6, 6, 6, 7], comment: "善くある話をどう演じるかという芸術の表現のポイントだったけどジャックニコルソンじゃないとみてらんないかなー。いやいい映画なんですけどね。途中で飽きちゃったかなー" },
-            { title: "パルプ・フィクション", metrics: [8, 8, 6, 9, 8, 7, 9], comment: "スマート＆鮮やか。意味なんてないけどとにかくかっこいい！最高！９でもいい。ユンカーマン綺麗。粋" },
-            { title: "クローズZERO", metrics: [7, 6, 6, 8, 8, 6, 9], comment: "山田孝之がとにかくこっこいい映画.爽快感。それだけ。" },
-            { title: "クローズZERO II", metrics: [8, 6, 5, 8, 8, 7, 9], comment: "ワンよりはいいストーリーってのは珍しい。キャラが立たせられている。とにかく爽快。結局何度も見てしまっている。山田孝之がかっこよくて" },
-            { title: "きっと、うまくいく", metrics: [9, 8, 10, 9, 6, 9, 9], comment: "メッセージ、展開、ベッタベタだけど最高。久しぶりに最高の映画.映画館で観たかった。闇も残酷なリアルも、それの乗り越え方も。伏線の回収も。" },
-            { title: "ファイト・クラブ", metrics: [8, 8, 7, 8, 7, 9, 9], comment: "理想の自分、閉じ込めてた自分、かっこいい。アングラな感じが渋くてかっこいい。" },
-            { title: "蝶の眠り", metrics: [6, 7, 8, 6, 7, 6, 7], comment: "みぽりんの追悼。ものを書きたくなった。病気系はありふれているので、演技力と表現力が大事。みぽりんの良さはそこじゃない。声が好き。" },
-            { title: "素晴らしき世界", metrics: [7, 7, 7, 8, 7, 8, 7], comment: "いい映画だった。社会的弱者の葛藤が胸に切に迫る。やくどころひろし。８でもいいな。" },
-            { title: "火の華 (劇場観覧)", metrics: [7, 8, 8, 7, 7, 7, 8], comment: "リアル。現実よりリアルだった。リアルすぎてセリフが聞こえなくて、物語が一部わからないほど。" },
-            { title: "君の膵臓をたべたい", metrics: [6, 7, 5, 5, 6, 7, 6], comment: "浜辺美波のういういしさが押し売り過ぎてきつい。膵臓を食べたら治るって言説との構成はうまかった" },
-            { title: "アラビアのロレンス", metrics: [8, 7, 8, 7, 8, 9, 9], comment: "長い。ただ圧倒的なスケールだった。人一人が変わっていく細かい様相がパノラマ的に切実に味わえる。９でもいい。圧倒的だった。" },
-            { title: "PERFECT BLUE", metrics: [7, 7, 7, 7, 7, 7, 7], comment: "意外な角度からの宿業。気持ち悪くないいいサスペンス。自分の理想を押し付ける怖い人。" },
-            { title: "オープン・ユア・アイズ", metrics: [7, 6, 5, 8, 7, 7, 7], comment: "ぐらぐらする。真実を探して。ペネロペクルスきれい。" },
-            { title: "シザーハンズ", metrics: [7, 3, 2, 2, 6, 8, 8], comment: "こどもむけのいい映画。でぃずにーらしい。" },
-            { title: "明日の記憶", metrics: [8, 7, 6, 8, 7, 9, 6], comment: "途中から涙が止まらなかった。映画史上いちばん泣いたかも。最後が切なすぎる。まー設定は問題あるけど。" },
-            { title: "祭りの準備", metrics: [9, 8, 8, 8, 7, 9, 7], comment: "リアルと爽快感。最後に傍若無人の人が称えて東京で一旗揚げてこいって仲間が最高過ぎた。むかしの漁港のリアルを知れた。人類の本質。現代は社会性が人間を覆い過ぎている。" },
-            { title: "ボディガード", metrics: [6, 3, 2, 2, 8, 7, 8], comment: "こぎれいなヒーロー映画。ありがち。" },
-            { title: "三島由紀夫vs東大全共闘", metrics: [7, 7, 7, 8, 6, 6, 4], comment: "三島の思いを知れました。" },
-            { title: "アイズ ワイド シャット", metrics: [6, 6, 7, 5, 6, 5, 8], comment: "意味が分からんかった気がする。人間の本質は性" },
-            { title: "戦場のメリークリスマス", metrics: [6, 6, 5, 6, 7, 5, 6], comment: "もっかい見ないとわからん。" },
-            { title: "ゴジラ-1.0", metrics: [5, 4, 4, 3, 6, 6, 7], comment: "こまとまり" },
-            { title: "シャイニング", metrics: [5, 5, 5, 4, 6, 6, 7], comment: "展開がわからん。なぜこんなに人気と言うか有名なのか。昔だからなのか。" },
-            { title: "エマニエル夫人", metrics: [6, 5, 6, 7, 7, 6, 9], comment: "とにかく白人貴婦人がエロい。暇な奴はあかんな。" },
-            { title: "カッコーの巣の上で", metrics: [8, 7, 6, 6, 7, 8, 7], comment: "残酷な現実を食い破るエネルギーが欲しい。人間はもっと自由に生き生きしていい。その代償は自分で引き受ければいい。" },
-            { title: "チャイナタウン", metrics: [7, 5, 5, 4, 7, 5, 6], comment: "誰も幸せにならん。ジャックの悪党ぶりがいい。" },
-            { title: "カサブランカ", metrics: [5, 4, 5, 5, 8, 6, 5], comment: "もっかい見ないと。王道ラブロマンス、よく覚えていない。" },
-            { title: "ベロニカは死ぬことにした", metrics: [6, 6, 6, 4, 8, 5, 6], comment: "美大生作のカッコーの巣の上で。こじらせている。" },
-            { title: "おくりびと", metrics: [6, 6, 6, 4, 6, 8, 7], comment: "まとまりよし。職業に貴賤なし。広末うつくしい。無難によし。" },
-            { title: "東京物語", metrics: [5, 4, 4, 5, 4, 7, 4], comment: "フリかと思われた布石ですべてが終わった。淡々と。なにが名作なのか、まだ理解できない。" },
-            { title: "恋愛小説家", metrics: [9, 6, 7, 9, 8, 9, 9], comment: "美と醜　リアルと欲望　総じて美　感情描写すごい。演技が美しかったー。大人の葛藤、恋愛。グッドマンになりたくなる。ベターマンに。" },
-            { title: "キングダム シリーズ", metrics: [6, 4, 4, 4, 5, 7, 8], comment: "ドンパチのみ。" },
-            { title: "七人の侍", metrics: [8, 7, 7, 8, 7, 8, 8], comment: "志、武士の矜持と傲慢。圧倒的身体描写。タイムスリップしている。本当に" },
-            { title: "スプリング・フィーバー", metrics: [5, 7, 5, 6, 8, 6, 5], comment: "BLが生々しすぎて見れず。" },
-            { title: "アネット", metrics: [4, 4, 4, 2, 7, 2, 7], comment: "ずっと謎ミュージカル。マリオンコティヤール好きなのに。" },
-            { title: "アニー・ホール", metrics: [7, 7, 9, 8, 6, 6, 6], comment: "洒落と知恵と皮肉でできている。もっと文学とかが理解できていたらたのしいだろうな。ウッディアレン爆発。好き" },
-            { title: "素晴らしきかな、人生！(1946)", metrics: [7, 6, 6, 7, 6, 6, 6], comment: "軽めの明るい名作" },
-            { title: "ハンナ・アーレント", metrics: [7, 7, 7, 7, 5, 7, 6], comment: "信念を、志をもって探求と仕事を続けていく。人間の見たくないところから目をそらさない。" },
-            { title: "華麗なるギャツビー", metrics: [5, 4, 5, 4, 7, 6, 9], comment: "空中戦をずっとやられてた感じ。共同幻想。" },
-            { title: "ミッドナイト・イン・パリ", metrics: [10, 8, 8, 9, 9, 9, 9], comment: "えぐられ過ぎた。痛いとこついてくるくせに、慰めてくれるし、納得感が持てる。マリオンコティヤールやばい。一番妖艶でミステリアスで美しい。" },
-            { title: "龍の歯医者", metrics: [7, 6, 6, 9, 6, 6, 9], comment: "メタファー多すぎ捉えられない。映像凄い、成長物語。もっかい見たい。" },
-            { title: "レオン", metrics: [7, 6, 5, 6, 7, 8, 8], comment: "悲しきモンスターと天才少女、アクションかっこいい。8でもいい。最後のフロムマチルダ。切ない。" },
-            { title: "マッチポイント", metrics: [6, 6, 5, 5, 5, 6, 7], comment: "胸糞、人生ガチャ、英国階級。ただこの世は胸糞である。" },
-            { title: "戦場のピアニスト", metrics: [6, 6, 6, 5, 7, 5, 7], comment: "抑留の臨場感、ピアノはたまたま。そんなことあるんかな。" },
-            { title: "プロヴァンスの贈りもの", metrics: [8, 6, 7, 7, 5, 7, 8], comment: "大好きなマリオン。セリフの一つ一つがおしゃれ。ラッセルクロウもいい。これぞ役者。" },
-            { title: "食べて、祈って、恋をして", metrics: [6, 7, 8, 5, 6, 6, 6], comment: "恋のために調和を崩れることは、調和のある生き方の一部である。でも自分の人生を生きたい。他者の介入をどうするか。ムズイ" },
-            { title: "攻殻機動隊 GHOST IN THE SHELL", metrics: [5, 6, 6, 4, 6, 5, 6], comment: "商業的に急いで作られた映画。名を借りて。" },
-            { title: "シェルブールの雨傘", metrics: [8, 4, 6, 7, 8, 8, 8], comment: "音楽が離れない。足し引きが素晴らしい。最後がいい。頭から離れない。最後のため。マディソン橋みたい。" },
-            { title: "ジョー・ブラックをよろしく", metrics: [6, 5, 7, 7, 8, 6, 8], comment: "映像など頑張ったけどね。クレアがとにかくきれいな映画。出会いのシーンなんて最高。" },
-            { title: "フォレスト・ガンプ", metrics: [8, 8, 6, 6, 7, 8, 6], comment: "1人語りでここまでよいとは。純朴が世界を貫く。とにかくまっすぐ走る。" },
-            { title: "竜馬暗殺", metrics: [4, 5, 5, 4, 6, 5, 6], comment: "何をいってるかわからん、展開も。" },
-            { title: "ペンタゴン・ペーパーズ", metrics: [6, 5, 8, 7, 6, 7, 6], comment: "使命に燃えて、忙しくしていたいと思わせる。" },
-            { title: "燃えよ剣", metrics: [6, 6, 7, 5, 5, 6, 6], comment: "岡田くんの映画。演技ヤバイ" },
-            { title: "日本の一番長い日", metrics: [8, 7, 7, 6, 7, 6, 8], comment: "圧倒的名演、熱量、リアル。熱がすごい。使命も。" },
-            { title: "この世界の片隅に", metrics: [8, 8, 8, 7, 6, 8, 8], comment: "素晴らしい戦時の女性たちのリアルだった。" },
-            { title: "タイタニック", metrics: [8, 8, 7, 7, 8, 8, 8], comment: "ジャックのように生きたい。感情移入できた。スクールスマートよりもストリートスマートに。グッドマン。" },
-            { title: "JOKER", metrics: [9, 8, 7, 8, 7, 8, 8], comment: "虐げられる社会構造、無敵の人が作られるレシピ(環境、遺伝子)が書いてある。圧倒的リアル。アメリカの縮図。狂気の美しいダンス。" },
-            { title: "シンドラーのリスト", metrics: [8, 8, 7, 7, 5, 7, 7], comment: "ビジネスが人を救う一例、淡々と仕事をこなす" },
-            { title: "浅草キッド", metrics: [7, 7, 7, 8, 8, 8, 8], comment: "こぎれい。大泉洋映画。知られざる人(アンサングヒーロー)が世界にはいっぱいいる。もっと称えられるべき人が。心意気とはこういうことか。DNAは確実に生きている。浅草の深見の。" },
-            { title: "生きる", metrics: [9, 8, 8, 8, 8, 9, 8], comment: "志村喬の名演。ラストの変わらない現実がリアルで共感を" },
-            { title: "ゴッドファーザー PART I", metrics: [8, 8, 8, 8, 8, 8, 8], comment: "圧倒的な雰囲気。マーロンブランド映画。家族、信頼" },
-            { title: "ゴッドファーザー PART II", metrics: [6, 3, 0, 0, 0, 0, 0], comment: "前作に比べて退屈だった。" },
-            { title: "時計じかけのオレンジ", metrics: [9, 9, 7, 8, 8, 7, 9], comment: "狂気と鮮烈と社会のひずみ。アート的な狂気。強制更生はいいのか。人間の尊厳とは。" },
-            { title: "アルマゲドン", metrics: [7, 6, 5, 8, 8, 9, 0], comment: "ドンパチ、人間愛。" },
-            { title: "ショーシャンクの空に", metrics: [6, 7, 7, 6, 7, 7, 7], comment: "うーんいい映画。きれいな映画。なんであんま感情が乗れなかったんだろう。もっかい見るか。" }
-        ];
-
-        function initDatabase() {
-            const tbody = document.getElementById('db-tbody');
-            tbody.innerHTML = '';
-            
-            movieDatabase.forEach(movie => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-cinema-800/30 transition-colors";
-                
-                let catharsisStyle = "text-slate-400";
-                if (movie.metrics[0] === 10) catharsisStyle = "text-cinema-glow font-black";
-                else if (movie.metrics[0] === 9) catharsisStyle = "text-white font-bold bg-cinema-glow/10 px-1.5 py-0.5 rounded";
-                else if (movie.metrics[0] === 8) catharsisStyle = "text-slate-200 font-semibold";
-                
-                tr.innerHTML = `
-                    <td class="py-2.5 px-3 font-semibold text-white font-serif text-xs">${movie.title}</td>
-                    <td class="py-2.5 px-1.5 text-center font-bold ${catharsisStyle}">${movie.metrics[0]}</td>
-                    <td class="py-2.5 px-1.5 text-center">${movie.metrics[1]}</td>
-                    <td class="py-2.5 px-1.5 text-center">${movie.metrics[2]}</td>
-                    <td class="py-2.5 px-1.5 text-center">${movie.metrics[3]}</td>
-                    <td class="py-2.5 px-1.5 text-center">${movie.metrics[4]}</td>
-                    <td class="py-2.5 px-1.5 text-center">${movie.metrics[5]}</td>
-                    <td class="py-2.5 px-1.5 text-center">${movie.metrics[6]}</td>
-                    <td class="py-2.5 px-3 text-slate-400 italic font-serif leading-relaxed text-[11px]">${movie.comment || '-'}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function filterDatabase() {
-            const query = document.getElementById('db-search').value.toLowerCase();
-            const filterClass = document.getElementById('db-filter-class').value;
-            const rows = document.querySelectorAll('#db-tbody tr');
-
-            rows.forEach((row, index) => {
-                const movie = movieDatabase[index];
-                const matchesSearch = movie.title.toLowerCase().includes(query) || movie.comment.toLowerCase().includes(query);
-                
-                let matchesFilter = true;
-                const score = movie.metrics[0];
-                if (filterClass === '90') matchesFilter = (score >= 9);
-                else if (filterClass === '80') matchesFilter = (score === 8);
-                else if (filterClass === '60') matchesFilter = (score === 6 || score === 7);
-                else if (filterClass === 'under') matchesFilter = (score <= 5);
-
-                if (matchesSearch && matchesFilter) {
-                    row.classList.remove('hidden');
-                } else {
-                    row.classList.add('hidden');
-                }
-            });
-        }
-
-        function runCalculator() {
-            const catharsis = parseFloat(document.getElementById('calc-catharsis').value);
-            const subversion = parseInt(document.getElementById('calc-subversion').value);
-            const wit = parseInt(document.getElementById('calc-wit').value);
-            const rewatch = parseInt(document.getElementById('calc-rewatch').value);
-            const sound = parseInt(document.getElementById('calc-sound').value);
-            const cohesion = parseInt(document.getElementById('calc-cohesion').value);
-            const beauty = parseInt(document.getElementById('calc-beauty').value);
-
-            let score = 0;
-            let tag = "";
-            let desc = "";
-
-            if (catharsis === 10) {
-                score = 100;
-                tag = "GOD TIER / 超越";
-                desc = "あなたの既存の映画史と平穏を跡形もなく破壊し、現実と戦う武器を授けた至高のマスターピース。";
-            } else if (catharsis === 9) {
-                const base = 90;
-                const bonus = Math.round(((subversion * 2.0) + (wit * 1.5) + (rewatch * 1.0) + (sound * 0.5) + (cohesion * 0.5) + (beauty * 0.5)) / 6);
-                score = base + Math.min(bonus, 9);
-                tag = "MASTERPIECE / 傑作";
-                desc = "圧倒的カタルシス。醜悪さと葛藤の果てに、より良き人間でありたいと渇望させる本音の傑作。";
-            } else if (catharsis === 8.9) {
-                score = 89;
-                tag = "THRESHOLD / 89点の壁";
-                desc = "昨日と違う自分になれるか。現実と戦う武器を手にしたか。カタルシス9に極めて近い、魂の葛藤の作品。";
-            } else if (catharsis === 8) {
-                const base = 80;
-                const bonus = Math.round(((subversion * 2.0) + (wit * 1.5) + (rewatch * 1.0) + (sound * 0.5) + (cohesion * 0.5) + (beauty * 0.5)) / 6);
-                score = base + Math.min(bonus, 8);
-                tag = "HIGHLY RECOMMENDED / 良作";
-                desc = "確固たる体温と野生が流れ、映画史の予定調和に抗う力強さを持った非常に優れた作品。";
-            } else if (catharsis === 7 || catharsis === 6) {
-                const base = catharsis * 10;
-                const bonus = Math.round(((subversion * 1.5) + (wit * 1.0) + (rewatch * 1.0)) / 4);
-                score = base + Math.min(bonus, 9);
-                tag = "AVERAGE PASS / 及第点";
-                desc = "映像として破綻はしていないが、予定調和であり、現実と戦う武器にはならない及第点の凡作。";
-            } else {
-                score = Math.round(catharsis * 10);
-                tag = "REJECTED / 欺瞞";
-                desc = "能天気なだけの電気的快楽、あるいは美大生のこじらせ。人間の生々しい体温を漂白した最悪の綺麗事。";
-            }
-
-            document.getElementById('calc-score').innerText = score;
-            document.getElementById('calc-rating-tag').innerText = tag;
-            document.getElementById('calc-analysis').innerText = `「${desc}」`;
-        }
-
-        function switchTab(tabId) {
-            const contents = document.querySelectorAll('.tab-content');
-            contents.forEach(content => {
-                content.classList.add('hidden');
-            });
-
-            const targetContent = document.getElementById('content-' + tabId);
-            if (targetContent) {
-                targetContent.classList.remove('hidden');
-                document.querySelector('main').scrollTop = 0;
-            }
-
-            const buttons = document.querySelectorAll('.tab-btn');
-            buttons.forEach(btn => {
-                btn.classList.remove('bg-cinema-800/50', 'text-white', 'border-cinema-glow');
-                btn.classList.add('text-slate-400', 'hover:bg-cinema-900', 'hover:text-slate-200', 'border-transparent');
-                
-                const spanNum = btn.querySelector('span:first-child');
-                if (spanNum && !btn.id.includes('manual') && !btn.id.includes('dashboard')) {
-                    spanNum.classList.remove('text-cinema-glow');
-                    spanNum.classList.add('text-slate-500');
-                }
-            });
-
-            const activeBtn = document.getElementById('btn-' + tabId);
-            if (activeBtn) {
-                activeBtn.classList.remove('text-slate-400', 'hover:bg-cinema-900', 'hover:text-slate-200', 'border-transparent');
-                activeBtn.classList.add('bg-cinema-800/50', 'text-white', 'border-cinema-glow');
-                
-                const spanNum = activeBtn.querySelector('span:first-child');
-                if (spanNum && !tabId.includes('manual') && !tabId.includes('dashboard')) {
-                    spanNum.classList.remove('text-slate-500');
-                    spanNum.classList.add('text-cinema-glow');
-                }
-            }
-
-            const mButtons = document.querySelectorAll('.mobile-tab-btn');
-            mButtons.forEach(btn => {
-                btn.classList.remove('bg-cinema-800', 'text-white', 'border', 'border-cinema-glow/30');
-                btn.classList.add('text-slate-400', 'bg-cinema-900');
-            });
-
-            const activeMBtn = document.getElementById('m-btn-' + tabId);
-            if (activeMBtn) {
-                activeMBtn.classList.remove('text-slate-400', 'bg-cinema-900');
-                activeMBtn.classList.add('bg-cinema-800', 'text-white', 'border', 'border-cinema-glow/30');
-                activeMBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-            }
-        }
-
-        window.onload = function() {
-            initDatabase();
-            runCalculator();
-        }
-    </script>
-</body>
-</html>
+<!-- ... existing code ... -->
